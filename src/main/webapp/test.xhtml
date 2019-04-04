@@ -2,69 +2,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:o="http://omnifaces.org/ui"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions"
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
-	<title>PrimeFaces Test</title>
+	<title>Socket Test</title>
 </h:head>
 <h:body>
 	<h:form id="form">
-		<p:growl id="growl" showDetail="true" sticky="true" />  
+		<p:growl id="growl" showDetail="true" sticky="true" />
 		<p:panel header="Form" id="panel">
 			<h:panelGrid columns="2" cellpadding="10">
 				<h:outputText value="Name" />
-				
-				<p:inputText value="#{testView.info.name}" readonly="#{testView.info.readOnly}" disabled="#{testView.info.readOnly}"></p:inputText>
-				
+
+				<p:inputText value="#{testView.info.name}"
+					readonly="#{testView.info.readOnly}"
+					disabled="#{testView.info.readOnly}" />
+
 				<h:outputText value="Description" />
-				
-				<p:inputTextarea value="#{testView.info.description}" readonly="#{testView.info.readOnly}" disabled="#{testView.info.readOnly}"></p:inputTextarea>
-				
-			</h:panelGrid> 
-			
-			<p:commandButton value="Edit" 
-							widgetVar="edit"
-							icon="fa fa-edit" 
-							update="@form"
-							rendered="#{testView.info.readOnly and applicationSocket.readOnly}"
-							actionListener="#{testView.editButtonAction()}">
-<!-- 							rendered="#{applicationSocket.readOnly}" -->
-							
+
+				<p:inputTextarea value="#{testView.info.description}"
+					readonly="#{testView.info.readOnly}"
+					disabled="#{testView.info.readOnly}" />
+
+			</h:panelGrid>
+
+			<p:commandButton value="Edit" widgetVar="edit" icon="fa fa-edit"
+				update="@form"
+				rendered="#{testView.info.readOnly and applicationSocket.readOnly}"
+				actionListener="#{testView.editButtonAction()}">
+
 			</p:commandButton>
-			
-			<p:commandButton widgetVar="save" 
-							value="Save" 
-							icon="fa fa-save" 
-							rendered="#{!testView.info.readOnly}"
-							>
-<!-- 							rendered="#{!applicationSocket.readOnly}" -->
+
+			<p:commandButton widgetVar="save" value="Save" icon="fa fa-save"
+				rendered="#{!testView.info.readOnly}">
 			</p:commandButton>
-			
-			<p:commandButton widgetVar="cancel" 
-							value="Cancel" 
-							rendered="#{!testView.info.readOnly}"
-							actionListener="#{testView.cancelButtonAction()}"
-							update="@form"
-							icon="fa fa-times">
-<!-- 							rendered="#{!applicationSocket.readOnly}"  -->
-			
+
+			<p:commandButton widgetVar="cancel" value="Cancel"
+				rendered="#{!testView.info.readOnly}"
+				actionListener="#{testView.cancelButtonAction()}" update="@form"
+				icon="fa fa-times">
+
 			</p:commandButton>
 		</p:panel>
-	
-		<o:socket channel="secondChannel"
-				onmessage="triggerCommandScript"
-			>
-			<f:ajax event="updateNotifications" render=":form" listener="#{testView.onEdit()}" />
+
+		<o:socket channel="secondChannel" onmessage="triggerCommandScript">
+			<f:ajax event="updateNotifications" render=":form"
+				listener="#{testView.onEdit()}" />
 		</o:socket>
-		
-	<!-- <p:remoteCommand name="rc" actionListener="#{testView.onEdit()}" update="@form" oncomplete="PF('edit').disable()"></p:remoteCommand> -->
-	
+
 	</h:form>
 	<h:form>
-	    <o:commandScript name="triggerCommandScript" action="#{testView.onEdit()}" render=":form" />
+		<o:commandScript name="triggerCommandScript"
+			action="#{testView.onEdit()}" render=":form" />
 	</h:form>
 </h:body>
 </html>
