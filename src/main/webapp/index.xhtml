@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+
+<h:body>
+	<h:form>
+		<p:growl id="growl" showDetail="true" sticky="true">
+			<p:autoUpdate/>
+		</p:growl>
+	</h:form>
+	
+	<p:toolbar>
+	   <p:toolbarGroup align="left">
+	       <p:outputLabel value="Network Analyzer (Master View)" />
+	       <i class="pi pi-user"></i>
+	   </p:toolbarGroup>
+	</p:toolbar>
+
+	<h:form>
+		<div class="ui-fluid">
+		
+			<p:panelGrid columns="3"
+						columnClasses="ui-grid-col-2,ui-grid-col-6"
+						layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+				<p:outputLabel value="Enter Worker IP"/>
+				
+				<p:inputText placeholder="Please enter worker IP"
+							value="#{networkAnalyzerBean.worker.workerIP}">
+				</p:inputText>
+				
+				<p:commandButton value="Submit" actionListener="#{networkAnalyzerBean.submitWorker()}"></p:commandButton>
+								
+			</p:panelGrid>
+		
+			<p:panelGrid columns="4"
+				columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+				layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+				<p:outputLabel for="input" value="Input" />
+				<p:inputText id="input" />
+
+				<p:outputLabel for="area" value="Textarea" />
+				<p:inputTextarea id="area" />
+
+				<p:outputLabel for="calendar" value="Calendar" />
+				<p:calendar id="calendar" />
+
+				<p:outputLabel for="ac" value="Auto Complete" />
+				<p:autoComplete id="ac"
+					completeMethod="#{autoCompleteView.completeText}" />
+
+				<p:outputLabel for="mask" value="Mask" />
+				<p:inputMask id="mask" mask="99/99/9999" />
+
+				<p:outputLabel for="pwd" value="Password" />
+				<p:password id="pwd" />
+
+				<p:outputLabel for="keyboard" value="Keyboard" />
+				<p:keyboard id="keyboard" />
+
+				<p:outputLabel for="onemenu" value="OneMenu" />
+				<p:selectOneMenu id="onemenu">
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+					<f:selectItem itemLabel="PS4" itemValue="PS4" />
+					<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="spinner" value="Spinner" />
+				<p:spinner id="spinner" />
+
+				<p:outputLabel for="slider" value="Slider" />
+				<p:outputPanel>
+					<p:inputText id="slider" />
+					<p:slider for="slider" />
+				</p:outputPanel>
+			</p:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+
+</html>
