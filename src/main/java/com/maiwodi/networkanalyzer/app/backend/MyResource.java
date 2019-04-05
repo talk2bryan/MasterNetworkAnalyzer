@@ -1,6 +1,9 @@
 package com.maiwodi.networkanalyzer.app.backend;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +32,15 @@ public class MyResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public DummyModel sampleJson() {
 		return new DummyModel("afd", "ss");
+	}
+
+	@POST
+	@Path("post/data")
+	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: model
+	public void postDataForAnalysis() {
+		// TODO
 	}
 
 }
