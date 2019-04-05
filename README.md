@@ -1,1 +1,1 @@
-This is a sample maven project for networking analyzer
+This is a maven project for networking analyzer
