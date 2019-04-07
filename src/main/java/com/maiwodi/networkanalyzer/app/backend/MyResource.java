@@ -1,5 +1,7 @@
 package com.maiwodi.networkanalyzer.app.backend;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -37,10 +39,17 @@ public class MyResource {
 	@POST
 	@Path("post/data")
 	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	// TODO: model
-	public void postDataForAnalysis() {
-		// TODO
+	public DummyModel postDataForAnalysis(List<NetworkData> networkDataList) {
+
+		if (null != networkDataList) {
+			return new DummyModel("Got it", "Got it");
+		} else {
+
+			return new DummyModel("No data", "no data");
+		}
+
 	}
 
 }
