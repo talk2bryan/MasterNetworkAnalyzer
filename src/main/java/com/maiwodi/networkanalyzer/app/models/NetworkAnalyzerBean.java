@@ -29,7 +29,7 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	public void submitWorker() {
 		workers.addWorker(worker);
 
-		Utilities.showInfoMessage("Worker Submmitted", "The submitted worker IP is " + worker.getWorkerIP());
+		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 	}
 
 	public Workers getWorkers() {
