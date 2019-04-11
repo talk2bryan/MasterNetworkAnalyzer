@@ -38,79 +38,41 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	public void submitWorker() {
 		workers.addWorker(worker);
 
-		String response = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/myresource/get");
+		String response = JerseyClient
+				.sendGetResponse("http://localhost:8080/networkanalyzer/", 
+						"rest/myresource/getAddWorker");
 
 		LOGGER.debug("Response: {}", response);
 
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 	}
+	
+	/*
+	 * public void submitWorker() { workers.addWorker(worker);
+	 * 
+	 * String response =
+	 * JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+	 * "rest/myresource/get");
+	 * 
+	 * LOGGER.debug("Response: {}", response);
+	 * 
+	 * Utilities.showInfoMessage("Worker Submitted",
+	 * "The submitted worker IP is " + worker.getWorkerIP()); }
+	 */
 
-	// TODO: remove it later
-	public void backendTest() {
-		String json = "[ {\r\n" + 
-				"\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603519\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603521\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603523\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -53,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603525\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -57,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603527\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -57,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603529\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -54,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603531\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -54,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603533\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -54,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603535\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603537\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603539\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603541\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -54,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603543\"\r\n" + 
-				"      }, {\r\n" + 
-				"        \"rssiValue\" : -55,\r\n" + 
-				"        \"speedInMbps\" : 72,\r\n" + 
-				"        \"timeStamp\" : \"1554603545\"\r\n" + 
-				"      } ]";
+	// TODO: data from Android
+	
+	public void collectDataFromClient(String json) {
+		LOGGER.debug("Received JSON: {}",json);
 		
 		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
 				"rest/myresource/post/data", json);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
-
+		
+	}
+	public void backendTest() {
+		;
 	}
 
 	public Workers getWorkers() {

@@ -34,6 +34,13 @@ public class MyResource {
 	public DummyModel sampleJson() {
 		return new DummyModel("afd", "ss");
 	}
+	
+	@GET
+	@Path("/getAddWorker")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String addWorker() {
+		return "Added new worker.";
+	}
 
 	@POST
 	@Path("post/data")
@@ -43,6 +50,7 @@ public class MyResource {
 	public DummyModel postDataForAnalysis(List<NetworkData> networkDataList) {
 
 		if (null != networkDataList) {
+			// Add code to process data.
 			return new DummyModel("Got it", "Got it");
 		} else {
 
