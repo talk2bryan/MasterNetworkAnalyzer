@@ -45,11 +45,10 @@
 			</p:panelGrid>
 			
 			<p:dataTable var="ip" value="#{networkAnalyzerBean.workers.getWorkers()}">
-					<p:column headerText="Worker IP Adresses">
-        				<h:outputText value="#{worker.getWorkerIP()}" />
-        			</p:column>
-				</p:dataTable>
-			
+				<p:column headerText="Worker IP Adresses">
+       				<h:outputText value="#{worker.getWorkerIP()}" />
+       			</p:column>
+			</p:dataTable>
 			
 			
 			<!-- <p:panelGrid columns="4"
