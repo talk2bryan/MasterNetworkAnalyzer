@@ -7,6 +7,7 @@ import javax.inject.Named;
 import com.maiwodi.networkanalyzer.app.models.Worker;
 import com.maiwodi.networkanalyzer.app.models.Workers;
 import com.maiwodi.networkanalyzer.app.utils.AbstractPageBean;
+import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
 import com.maiwodi.networkanalyzer.app.utils.Utilities;
 
 @Named
@@ -31,7 +32,17 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
     public void submitWorker() {
 	workers.addWorker(worker);
 
+	String response = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/myresource/get");
+
+	System.out.println(response);
+
 	Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+    }
+
+    // TODO: remove it later
+    public void backendTest() {
+	// JerseyClient.sendGetResponse(base, path)
+
     }
 
     public Workers getWorkers() {

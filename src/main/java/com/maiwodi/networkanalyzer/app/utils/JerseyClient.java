@@ -23,7 +23,7 @@ public class JerseyClient {
 	// path example: resource
 	WebTarget webTarget = client.target(base).path(path);
 
-	Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_XML);
+	Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
 	Response response = builder.get();
 
 	if (response.getStatus() != 200) {
