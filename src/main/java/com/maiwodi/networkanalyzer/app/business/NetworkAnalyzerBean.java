@@ -38,11 +38,6 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	public void submitWorker() {
 		workers.addWorker(worker);
 
-		String response = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
-				"rest/myresource/getAddWorker");
-
-		LOGGER.debug("Response: {}", response);
-
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 	}
 
