@@ -1,4 +1,5 @@
 package com.maiwodi.networkanalyzer.tests.backend;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.ws.rs.core.Response;
@@ -39,6 +40,9 @@ class TestWorkerResource {
 	void testNetworkDataAnalysis() {
 		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
 				"rest/worker/post/data", jsonStr);
+
+//		Response response = JerseyClient.sendPostResponse("http://172.31.31.231:8080/networkanalyzer-1.0-SNAPSHOT/",
+//				"rest/worker/post/data", jsonStr);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
 
