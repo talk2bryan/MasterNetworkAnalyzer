@@ -46,8 +46,8 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	// TODO: remove it later
 	public void backendTest() {
-		// JerseyClient.sendGetResponse(base, path)
-
+		// JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", path,
+		// xml);
 	}
 
 	public Workers getWorkers() {

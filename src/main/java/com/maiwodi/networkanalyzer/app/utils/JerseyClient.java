@@ -13,53 +13,53 @@ import org.apache.logging.log4j.Logger;
 
 public class JerseyClient {
 
-    private static final Logger LOGGER = LogManager.getLogger(JerseyClient.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(JerseyClient.class.getName());
 
-    public static String sendGetResponse(String base, String path) {
-	LOGGER.debug("The URL of GET is: {}", base + path);
+	public static String sendGetResponse(String base, String path) {
+		LOGGER.debug("The URL of GET is: {}", base + path);
 
-	Client client = ClientBuilder.newClient();
-	// base example: http://localhost:9998
-	// path example: resource
-	WebTarget webTarget = client.target(base).path(path);
+		Client client = ClientBuilder.newClient();
+		// base example: http://localhost:9998
+		// path example: resource
+		WebTarget webTarget = client.target(base).path(path);
 
-	Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
-	Response response = builder.get();
+		Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
+		Response response = builder.get();
 
-	if (response.getStatus() != 200) {
-	    throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		}
+
+		String output = response.readEntity(String.class);
+		return output;
 	}
 
-	String output = response.readEntity(String.class);
-	return output;
-    }
+	public static Response sendPostResponse(String base, String path, String json) {
+		LOGGER.debug("The URL of POST is: {}, and the XML to POST is {}", base + path, json);
 
-    public static Response sendPostResponse(String base, String path, String xml) {
-	LOGGER.debug("The URL of POST is: {}, and the XML to POST is {}", base + path, xml);
+		Client client = ClientBuilder.newClient();
 
-	Client client = ClientBuilder.newClient();
+		WebTarget webTarget = client.target(base).path(path);
 
-	WebTarget webTarget = client.target(base).path(path);
+		Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
+		Response response = builder.post(Entity.entity(json, MediaType.APPLICATION_JSON));
 
-	Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_XML);
-	Response response = builder.post(Entity.entity(xml, MediaType.APPLICATION_XML));
+		LOGGER.debug("Post response status: {}", response.getStatus());
 
-	LOGGER.debug("Post response status: {}", response.getStatus());
+		return response;
+	}
 
-	return response;
-    }
+	public static Response sendDeleteResponse(String base, String path) {
+		LOGGER.debug("The URL of DELETE is: {}", base + path);
 
-    public static Response sendDeleteResponse(String base, String path) {
-	LOGGER.debug("The URL of DELETE is: {}", base + path);
+		Client client = ClientBuilder.newClient();
+		WebTarget webTarget = client.target(base).path(path);
 
-	Client client = ClientBuilder.newClient();
-	WebTarget webTarget = client.target(base).path(path);
+		Invocation.Builder builder = webTarget.request();
+		Response response = builder.delete();
 
-	Invocation.Builder builder = webTarget.request();
-	Response response = builder.delete();
+		LOGGER.debug("Delete response status: {}", response.getStatus());
 
-	LOGGER.debug("Delete response status: {}", response.getStatus());
-
-	return response;
-    }
+		return response;
+	}
 }
