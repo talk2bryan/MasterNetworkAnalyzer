@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.maiwodi.networkanalyzer.app.utils.Utilities;
+
 public class Workers implements Serializable {
 
 	/**
@@ -26,6 +28,8 @@ public class Workers implements Serializable {
 		if (this.workers != null) {
 			workers.remove(worker);
 		}
+
+		Utilities.showInfoMessage("Info", "Worker IP: " + worker.getWorkerIP() + " has been successfull removed");
 	}
 
 	public void addWorker(Worker worker) {
