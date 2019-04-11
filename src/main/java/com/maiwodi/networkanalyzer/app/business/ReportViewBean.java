@@ -19,7 +19,7 @@ import org.primefaces.model.charts.line.LineChartOptions;
 import org.primefaces.model.charts.optionconfig.title.Title;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.maiwodi.networkanalyzer.app.backend.NetworkData;
+import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 
 @Named("reportViewBean")
 @ViewScoped

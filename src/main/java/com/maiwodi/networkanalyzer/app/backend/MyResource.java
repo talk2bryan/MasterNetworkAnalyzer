@@ -9,6 +9,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
+import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
+
 /**
  * Root resource (exposed at "myresource" path)
  */

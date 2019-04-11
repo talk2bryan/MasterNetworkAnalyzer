@@ -1,4 +1,4 @@
-package com.maiwodi.networkanalyzer.app.backend;
+package com.maiwodi.networkanalyzer.app.backend.models;
 
 public class DummyModel {
 	private String string1;
