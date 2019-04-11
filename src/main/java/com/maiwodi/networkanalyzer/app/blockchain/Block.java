@@ -11,10 +11,10 @@ public class Block implements Serializable {
 	private static final long serialVersionUID = 6931946827031608667L;
 
 	private int previousHash;
-	private String data;
+	private Object data;
 	private int hash;
 
-	public Block(String data, int previousHash) {
+	public Block(Object data, int previousHash) {
 		this.data = data;
 		this.previousHash = previousHash;
 		// Mix the content of this block with previous hash to create the hash of this
@@ -31,11 +31,11 @@ public class Block implements Serializable {
 		this.previousHash = previousHash;
 	}
 
-	public String getData() {
+	public Object getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(Object data) {
 		this.data = data;
 	}
 
