@@ -39,6 +39,9 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		workers.addWorker(worker);
 
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+
+		// reset after submit
+		worker = new Worker();
 	}
 
 	/*
