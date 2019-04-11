@@ -30,6 +30,8 @@
 				<p:outputLabel value="Enter Worker IP"/>
 				
 				<p:inputText placeholder="Please enter worker IP"
+							required="true"
+							validatorMessage="Worker IP address is required"
 							value="#{networkAnalyzerBean.worker.workerIP}">
 				</p:inputText>
 				
