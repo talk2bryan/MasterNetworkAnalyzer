@@ -2,7 +2,6 @@ package com.maiwodi.networkanalyzer.app.business;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,38 +12,10 @@ import javax.inject.Named;
 
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.charts.ChartData;
-import org.primefaces.model.charts.axes.cartesian.CartesianScales;
-import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
-import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
-import org.primefaces.model.charts.axes.radial.RadialScales;
-import org.primefaces.model.charts.axes.radial.linear.RadialLinearAngleLines;
-import org.primefaces.model.charts.axes.radial.linear.RadialLinearPointLabels;
-import org.primefaces.model.charts.axes.radial.linear.RadialLinearTicks;
-import org.primefaces.model.charts.bar.BarChartDataSet;
-import org.primefaces.model.charts.bar.BarChartModel;
-import org.primefaces.model.charts.bar.BarChartOptions;
-import org.primefaces.model.charts.bubble.BubbleChartDataSet;
-import org.primefaces.model.charts.bubble.BubbleChartModel;
-import org.primefaces.model.charts.bubble.BubblePoint;
-import org.primefaces.model.charts.donut.DonutChartDataSet;
-import org.primefaces.model.charts.donut.DonutChartModel;
-import org.primefaces.model.charts.hbar.HorizontalBarChartDataSet;
-import org.primefaces.model.charts.hbar.HorizontalBarChartModel;
 import org.primefaces.model.charts.line.LineChartDataSet;
 import org.primefaces.model.charts.line.LineChartModel;
 import org.primefaces.model.charts.line.LineChartOptions;
-import org.primefaces.model.charts.optionconfig.elements.Elements;
-import org.primefaces.model.charts.optionconfig.elements.ElementsLine;
-import org.primefaces.model.charts.optionconfig.legend.Legend;
-import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
 import org.primefaces.model.charts.optionconfig.title.Title;
-import org.primefaces.model.charts.pie.PieChartDataSet;
-import org.primefaces.model.charts.pie.PieChartModel;
-import org.primefaces.model.charts.polar.PolarAreaChartDataSet;
-import org.primefaces.model.charts.polar.PolarAreaChartModel;
-import org.primefaces.model.charts.radar.RadarChartDataSet;
-import org.primefaces.model.charts.radar.RadarChartModel;
-import org.primefaces.model.charts.radar.RadarChartOptions;
 
 @Named("reportViewBean")
 @ViewScoped
