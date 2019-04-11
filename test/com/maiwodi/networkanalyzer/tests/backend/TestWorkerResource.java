@@ -1,3 +1,4 @@
+package com.maiwodi.networkanalyzer.tests.backend;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.ws.rs.core.Response;
