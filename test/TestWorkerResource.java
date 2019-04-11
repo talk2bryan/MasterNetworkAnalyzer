@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.maiwodi.networkanalyzer.app.business.NetworkAnalyzerBean;
 import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
 
 class TestWorkerResource {
@@ -38,9 +37,11 @@ class TestWorkerResource {
 	@Test
 	void testNetworkDataAnalysis() {
 		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
-				"rest/myresource/post/data", jsonStr);
+				"rest/worker/post/data", jsonStr);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
+
+		assertEquals(response.getStatus(), 200);
 
 	}
 
