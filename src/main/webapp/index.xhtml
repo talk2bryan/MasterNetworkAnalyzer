@@ -34,6 +34,7 @@
 				</p:inputText>
 				
 				<p:commandButton value="Submit" 
+							icon="fa fa-send"
 							actionListener="#{networkAnalyzerBean.submitWorker()}"
 							update="@form" />
 			
@@ -53,6 +54,7 @@
        			<p:column headerText="Action">
        				<p:commandButton 
 						value="Remove"
+						icon="fa fa-remove"
 						update="@form"
 						actionListener="#{networkAnalyzerBean.workers.removeWorker(worker)}"/>
        			</p:column>
