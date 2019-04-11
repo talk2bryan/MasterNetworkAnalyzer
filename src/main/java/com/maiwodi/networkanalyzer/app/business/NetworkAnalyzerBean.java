@@ -38,15 +38,14 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	public void submitWorker() {
 		workers.addWorker(worker);
 
-		String response = JerseyClient
-				.sendGetResponse("http://localhost:8080/networkanalyzer/", 
-						"rest/myresource/getAddWorker");
+		String response = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/myresource/getAddWorker");
 
 		LOGGER.debug("Response: {}", response);
 
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 	}
-	
+
 	/*
 	 * public void submitWorker() { workers.addWorker(worker);
 	 * 
@@ -56,23 +55,20 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	 * 
 	 * LOGGER.debug("Response: {}", response);
 	 * 
-	 * Utilities.showInfoMessage("Worker Submitted",
-	 * "The submitted worker IP is " + worker.getWorkerIP()); }
+	 * Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " +
+	 * worker.getWorkerIP()); }
 	 */
 
 	// TODO: data from Android
-	
+
 	public void collectDataFromClient(String json) {
-		LOGGER.debug("Received JSON: {}",json);
-		
+		LOGGER.debug("Received JSON: {}", json);
+
 		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
 				"rest/myresource/post/data", json);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
-		
-	}
-	public void backendTest() {
-		;
+
 	}
 
 	public Workers getWorkers() {

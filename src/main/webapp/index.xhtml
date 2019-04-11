@@ -39,12 +39,9 @@
 							icon="fa fa-send"
 							actionListener="#{networkAnalyzerBean.submitWorker()}"
 							update="@form" />
-			
-				<p:commandButton value="Backend Test"
-								process="@this"
-								actionListener="#{networkAnalyzerBean.backendTest()}"
-								update="@form"/>
 			</p:panelGrid>
+			
+			<p:spacer height="10"></p:spacer>
 			
 			<p:dataTable id="workersTable"
 						value="#{networkAnalyzerBean.workers.workers}"
