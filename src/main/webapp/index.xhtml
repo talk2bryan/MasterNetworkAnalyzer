@@ -4,7 +4,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-
+	<h:outputStylesheet library="css" name="app.css"  />
 </h:head>
 
 <h:body>
@@ -46,7 +46,7 @@
 						value="#{networkAnalyzerBean.workers.workers}"
 						var="worker">
 				
-				<p:column headerText="Worker IP Adresses">
+				<p:column headerText="Worker IP Adresses" styleClass="Wid90">
        				<h:outputText value="#{worker.workerIP}" />
        			</p:column>
        			
