@@ -34,10 +34,15 @@
 				</p:inputText>
 				
 				<p:commandButton value="Submit" actionListener="#{networkAnalyzerBean.submitWorker()}"></p:commandButton>
-								
+			
+				<p:commandButton value="Backend Test"
+								actionListener="#{networkAnalyzerBean.backendTest()}"/>
+			
 			</p:panelGrid>
-		
-			<p:panelGrid columns="4"
+			
+			
+			
+			<!-- <p:panelGrid columns="4"
 				columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
 				layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
 				<p:outputLabel for="input" value="Input" />
@@ -78,7 +83,7 @@
 					<p:inputText id="slider" />
 					<p:slider for="slider" />
 				</p:outputPanel>
-			</p:panelGrid>
+			</p:panelGrid> -->
 		</div>
 	</h:form>
 </h:body>
