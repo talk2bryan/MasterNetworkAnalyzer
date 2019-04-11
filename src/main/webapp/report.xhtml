@@ -15,6 +15,10 @@
 	</h:form>
 
 	<h:form>
+		<p:commandButton value="Test" 
+					actionListener="#{reportViewBean.testButton()}"
+					update="@form"/>
+	
 		<p:lineChart model="#{reportViewBean.lineModel}"
 			style="width: 100%; height: 500px;" />
 	</h:form>
