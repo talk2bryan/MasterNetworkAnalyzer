@@ -33,20 +33,20 @@
 							value="#{networkAnalyzerBean.worker.workerIP}">
 				</p:inputText>
 				
-				<p:commandButton value="Submit" actionListener="#{networkAnalyzerBean.submitWorker()}"></p:commandButton>
+				<p:commandButton value="Submit" 
+							actionListener="#{networkAnalyzerBean.submitWorker()}"
+							update="@form" />
 			
 				<p:commandButton value="Backend Test"
-								actionListener="#{networkAnalyzerBean.backendTest()}"/>
-								
-				
-								
-			
+								actionListener="#{networkAnalyzerBean.backendTest()}"
+								update="@form"/>
 			</p:panelGrid>
 			
-			
-			<p:dataTable var="ip" value="#{networkAnalyzerBean.workers.getWorkers()}">
+			<p:dataTable id="workersTable"
+						value="#{networkAnalyzerBean.workers.workers}"
+						var="worker">
 				<p:column headerText="Worker IP Adresses">
-       				<h:outputText value="#{worker.getWorkerIP()}" />
+       				<h:outputText value="#{worker.workerIP}" />
        			</p:column>
 			</p:dataTable>
 			
