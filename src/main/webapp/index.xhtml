@@ -41,6 +41,7 @@
 							update="@form" />
 			
 				<p:commandButton value="Backend Test"
+								process="@this"
 								actionListener="#{networkAnalyzerBean.backendTest()}"
 								update="@form"/>
 			</p:panelGrid>
