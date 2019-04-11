@@ -38,11 +38,11 @@ class TestWorkerResource {
 
 	@Test
 	void testNetworkDataAnalysis() {
-		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
-				"rest/worker/post/data", jsonStr);
-
-//		Response response = JerseyClient.sendPostResponse("http://172.31.31.231:8080/networkanalyzer-1.0-SNAPSHOT/",
+//		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
 //				"rest/worker/post/data", jsonStr);
+
+		Response response = JerseyClient.sendPostResponse("http://172.31.31.231:8080/networkanalyzer-1.0-SNAPSHOT/",
+				"rest/worker/post/data", jsonStr);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
 
