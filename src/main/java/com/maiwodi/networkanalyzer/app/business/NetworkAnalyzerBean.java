@@ -17,53 +17,53 @@ import com.maiwodi.networkanalyzer.app.utils.Utilities;
 @ViewScoped
 public class NetworkAnalyzerBean extends AbstractPageBean {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 8692181958971244558L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8692181958971244558L;
 
-    private static final Logger LOGGER = LogManager.getLogger(NetworkAnalyzerBean.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(NetworkAnalyzerBean.class.getName());
 
-    private Workers workers;
+	private Workers workers;
 
-    private Worker worker;
+	private Worker worker;
 
-    @PostConstruct
-    public void loadPage() {
-	workers = new Workers();
-	worker = new Worker();
-    }
+	@PostConstruct
+	public void loadPage() {
+		workers = new Workers();
+		worker = new Worker();
+	}
 
-    public void submitWorker() {
-	workers.addWorker(worker);
+	public void submitWorker() {
+		workers.addWorker(worker);
 
-	String response = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/myresource/get");
+		String response = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/myresource/get");
 
-	LOGGER.debug("Response: {}", response);
+		LOGGER.debug("Response: {}", response);
 
-	Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
-    }
+		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+	}
 
-    // TODO: remove it later
-    public void backendTest() {
-	// JerseyClient.sendGetResponse(base, path)
+	// TODO: remove it later
+	public void backendTest() {
+		// JerseyClient.sendGetResponse(base, path)
 
-    }
+	}
 
-    public Workers getWorkers() {
-	return workers;
-    }
+	public Workers getWorkers() {
+		return workers;
+	}
 
-    public void setWorkers(Workers workers) {
-	this.workers = workers;
-    }
+	public void setWorkers(Workers workers) {
+		this.workers = workers;
+	}
 
-    public Worker getWorker() {
-	return worker;
-    }
+	public Worker getWorker() {
+		return worker;
+	}
 
-    public void setWorker(Worker worker) {
-	this.worker = worker;
-    }
+	public void setWorker(Worker worker) {
+		this.worker = worker;
+	}
 
 }
