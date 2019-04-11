@@ -45,8 +45,16 @@
 			<p:dataTable id="workersTable"
 						value="#{networkAnalyzerBean.workers.workers}"
 						var="worker">
+				
 				<p:column headerText="Worker IP Adresses">
        				<h:outputText value="#{worker.workerIP}" />
+       			</p:column>
+       			
+       			<p:column headerText="Action">
+       				<p:commandButton 
+						value="Remove"
+						update="@form"
+						actionListener="#{networkAnalyzerBean.workers.removeWorker(worker)}"/>
        			</p:column>
 			</p:dataTable>
 			

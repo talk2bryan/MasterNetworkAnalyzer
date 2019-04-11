@@ -22,6 +22,12 @@ public class Workers implements Serializable {
 		this.workers = workers;
 	}
 
+	public void removeWorker(Worker worker) {
+		if (this.workers != null) {
+			workers.remove(worker);
+		}
+	}
+
 	public void addWorker(Worker worker) {
 		if (this.workers == null) {
 			workers = new ArrayList<>();
