@@ -102,19 +102,6 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		worker = new Worker();
 	}
 
-	/*
-	 * public void submitWorker() { workers.addWorker(worker);
-	 * 
-	 * String response =
-	 * JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
-	 * "rest/myresource/get");
-	 * 
-	 * LOGGER.debug("Response: {}", response);
-	 * 
-	 * Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " +
-	 * worker.getWorkerIP()); }
-	 */
-
 	// TODO: data from Android
 
 	public void collectDataFromClient(String json) {
