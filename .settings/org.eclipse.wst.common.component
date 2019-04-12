@@ -5,6 +5,10 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <dependent-module archiveName="sqlite-jdbc-3.27.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/whoami/eclipse/lib/sqlite-jdbc-3.27.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/primefaces-test/target/classes"/>
         <property name="context-root" value="networkanalyzer"/>
     </wb-module>

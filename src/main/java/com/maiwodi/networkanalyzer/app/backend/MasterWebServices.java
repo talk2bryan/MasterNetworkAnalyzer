@@ -1,6 +1,15 @@
 package com.maiwodi.networkanalyzer.app.backend;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,10 +22,49 @@ import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 
 /**
- * Root resource (exposed at "myresource" path)
+ * Root resource (exposed at "master" path)
  */
-@Path("myresource")
-public class MyResource {
+@Path("master")
+public class MasterWebServices {
+	
+	Properties prop = new Properties();
+    InputStream input = null;
+    String dbLocation = null;
+	/*
+	 * Connection to db/NetworkAnalyzerDB.db
+	 * 
+	 * @return Connection Object
+	 * */
+	private Connection connect() {
+		// Load properties file.
+		try {
+			input = new FileInputStream("config.properties");
+			prop.load(input);
+			
+			dbLocation = prop.getProperty("dbLocation");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+		}
+		
+		String urlString = String.format("%s%s","jdbc:sqlite:", dbLocation);
+		Connection connection = null;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection(urlString);
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return connection;
+	}
 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent to the
@@ -38,10 +86,19 @@ public class MyResource {
 		return new DummyModel("afd", "ss");
 	}
 	
-	@GET
-	@Path("/getAddWorker")
+	@POST
+	@Path("/postAddWorker")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String addWorker() {
+	public String addWorker(String workerBaseAddress) {
+		String sql = "INSERT INTO Worker(BaseAddress) VALUES(?)";
+		
+		try (Connection connection = this.connect();
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, workerBaseAddress);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "Added new worker.";
 	}
 
@@ -53,6 +110,7 @@ public class MyResource {
 	public DummyModel postDataForAnalysis(List<NetworkData> networkDataList) {
 
 		if (null != networkDataList) {
+			
 			// Add code to process data.
 			return new DummyModel("Got it", "Got it");
 		} else {
