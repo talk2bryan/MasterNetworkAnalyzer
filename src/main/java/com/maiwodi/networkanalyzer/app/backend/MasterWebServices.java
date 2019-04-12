@@ -7,7 +7,10 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -101,23 +104,74 @@ public class MasterWebServices {
 		}
 		return "Added new worker.";
 	}
+	
+	@POST
+	@Path("/postAddCloudWorker")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String addCloudWorker(String workerBaseAddress) {
+		String sql = "INSERT INTO Cloud(BaseAddress) VALUES(?)";
+		
+		try (Connection connection = this.connect();
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, workerBaseAddress);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Added new CloudWorker.";
+	}
 
 	@POST
 	@Path("post/data")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: model
-	public DummyModel postDataForAnalysis(List<NetworkData> networkDataList) {
+	public String postDataForAnalysis(List<NetworkData> networkDataList) {
 
 		if (null != networkDataList) {
-			
+			String sql = "INSERT INTO "
+					+ "NetworkData(TimeStamp, rssiValue, SpeedInMbps) "
+					+ "VALUES(?, ?, ?)";
 			// Add code to process data.
-			return new DummyModel("Got it", "Got it");
+			try (Connection connection = this.connect();) {
+				for (NetworkData networkData : networkDataList) {
+					PreparedStatement statement = connection.prepareStatement(sql);
+					statement.setString(1, networkData.getTimeStamp());
+					statement.setInt(2, networkData.getRssiValue());
+					statement.setInt(3, networkData.getSpeedInMbps());
+				}
+				return "Added NetworkData";	
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		} else {
 
-			return new DummyModel("No data", "no data");
+			return "Could not add new NetworkData.";
 		}
-
+		return null;
+	}
+	
+	@GET
+	@Path("/readNetworkDataTable")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<NetworkData> readNetworkDataRepository() {
+		String sql = "SELECT TimeStamp, rssiValue, SpeedInMbps FROM NetworkData";
+		try (Connection conn = this.connect();
+	             Statement stmt  = conn.createStatement();
+	             ResultSet rs    = stmt.executeQuery(sql)){
+			List<NetworkData> networkDataList = new ArrayList<NetworkData>(); 
+	            while (rs.next()) {
+	            	NetworkData data = new NetworkData(
+	            			rs.getInt("rssiValue"),
+	            			rs.getInt("SpeedInMbps"),
+	            			rs.getString("TimeStamp"));
+	            	networkDataList.add(data);
+	            }
+	            return networkDataList;
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        }
+		return null;
 	}
 
 }
