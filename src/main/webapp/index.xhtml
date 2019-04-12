@@ -85,7 +85,7 @@
 						icon="fa fa-remove"
 						process="@this"
 						update="@form"
-						actionListener="#{networkAnalyzerBean.cloudWorkers.removeWorker(worker)}">
+						actionListener="#{networkAnalyzerBean.cloudWorkers.removeCloudWorker(worker)}">
 						<p:confirm header="Confirmation" message="Are you sure to remove this worker (#{worker.workerIP})?" icon="pi pi-exclamation-triangle" />
 					</p:commandButton>
        			</p:column>
