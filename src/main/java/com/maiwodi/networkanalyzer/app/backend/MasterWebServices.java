@@ -84,6 +84,8 @@ public class MasterWebServices {
 
 		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, workerBaseAddress);
+
+			statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -99,6 +101,8 @@ public class MasterWebServices {
 
 		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, workerBaseAddress);
+
+			statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,7 +124,10 @@ public class MasterWebServices {
 					statement.setString(1, networkData.getTimeStamp());
 					statement.setInt(2, networkData.getRssiValue());
 					statement.setInt(3, networkData.getSpeedInMbps());
+
+					statement.executeUpdate();
 				}
+
 				return "Added NetworkData";
 			} catch (Exception e) {
 				e.printStackTrace();
