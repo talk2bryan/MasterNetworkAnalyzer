@@ -74,11 +74,14 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	}
 
 	public void submitWorker() {
-		JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", 
-				"rest/master/postAddWorker", worker.getWorkerIP());
+
+		JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postAddWorker",
+				worker.getWorkerIP());
+
+		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+
 		// reset after submit
 		worker = new Worker();
-		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 	}
 
 	public void submitCloudWorker() {

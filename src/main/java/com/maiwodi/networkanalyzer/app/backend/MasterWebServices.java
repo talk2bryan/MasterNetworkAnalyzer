@@ -29,37 +29,23 @@ import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
  */
 @Path("master")
 public class MasterWebServices {
-	
+
 	Properties prop = new Properties();
-    InputStream input = null;
-    String dbLocation = null;
+	InputStream input = null;
+	String dbLocation = null;
+
 	/*
 	 * Connection to db/NetworkAnalyzerDB.db
 	 * 
 	 * @return Connection Object
-	 * */
+	 */
 	private Connection connect() {
 		// Load properties file.
-		try {
-			input = new FileInputStream("config.properties");
-			prop.load(input);
-			
-			dbLocation = prop.getProperty("dbLocation");
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-		
-		String urlString = String.format("%s%s","jdbc:sqlite:", dbLocation);
+		dbLocation = DBUtils.loadProp("dbLocation");
+
+		String urlString = String.format("%s%s", "jdbc:sqlite:", dbLocation);
 		Connection connection = null;
-		
+
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection(urlString);
@@ -88,32 +74,30 @@ public class MasterWebServices {
 	public DummyModel sampleJson() {
 		return new DummyModel("afd", "ss");
 	}
-	
+
 	@POST
 	@Path("/postAddWorker")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String addWorker(String workerBaseAddress) {
 		String sql = "INSERT INTO Worker(BaseAddress) VALUES(?)";
-		
-		try (Connection connection = this.connect();
-				PreparedStatement statement = connection.prepareStatement(sql)) {
+
+		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, workerBaseAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "Added new worker.";
 	}
-	
+
 	@POST
 	@Path("/postAddCloudWorker")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String addCloudWorker(String workerBaseAddress) {
 		String sql = "INSERT INTO Cloud(BaseAddress) VALUES(?)";
-		
-		try (Connection connection = this.connect();
-				PreparedStatement statement = connection.prepareStatement(sql)) {
+
+		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, workerBaseAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,9 +112,7 @@ public class MasterWebServices {
 	public String postDataForAnalysis(List<NetworkData> networkDataList) {
 
 		if (null != networkDataList) {
-			String sql = "INSERT INTO "
-					+ "NetworkData(TimeStamp, rssiValue, SpeedInMbps) "
-					+ "VALUES(?, ?, ?)";
+			String sql = "INSERT INTO " + "NetworkData(TimeStamp, rssiValue, SpeedInMbps) " + "VALUES(?, ?, ?)";
 			// Add code to process data.
 			try (Connection connection = this.connect();) {
 				for (NetworkData networkData : networkDataList) {
@@ -139,38 +121,36 @@ public class MasterWebServices {
 					statement.setInt(2, networkData.getRssiValue());
 					statement.setInt(3, networkData.getSpeedInMbps());
 				}
-				return "Added NetworkData";	
+				return "Added NetworkData";
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
 
 			return "Could not add new NetworkData.";
 		}
 		return null;
 	}
-	
+
 	@GET
 	@Path("/readNetworkDataTable")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<NetworkData> readNetworkDataRepository() {
 		String sql = "SELECT TimeStamp, rssiValue, SpeedInMbps FROM NetworkData";
 		try (Connection conn = this.connect();
-	             Statement stmt  = conn.createStatement();
-	             ResultSet rs    = stmt.executeQuery(sql)){
-			List<NetworkData> networkDataList = new ArrayList<NetworkData>(); 
-	            while (rs.next()) {
-	            	NetworkData data = new NetworkData(
-	            			rs.getInt("rssiValue"),
-	            			rs.getInt("SpeedInMbps"),
-	            			rs.getString("TimeStamp"));
-	            	networkDataList.add(data);
-	            }
-	            return networkDataList;
-	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	        }
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+			List<NetworkData> networkDataList = new ArrayList<NetworkData>();
+			while (rs.next()) {
+				NetworkData data = new NetworkData(rs.getInt("rssiValue"), rs.getInt("SpeedInMbps"),
+						rs.getString("TimeStamp"));
+				networkDataList.add(data);
+			}
+			return networkDataList;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 		return null;
 	}
 
