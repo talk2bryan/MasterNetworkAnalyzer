@@ -1,7 +1,11 @@
 package com.maiwodi.networkanalyzer.app.utils;
 
+import java.io.IOException;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Utilities {
 	/**
@@ -50,6 +54,26 @@ public class Utilities {
 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, title, message));
+	}
+
+	/**
+	 * Unmarshall json obj from json str
+	 * 
+	 * @param jsonStr
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T unmarshall(String jsonStr, Class<T> clazz) {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		T obj = null;
+		try {
+			obj = objectMapper.readValue(jsonStr, clazz);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return obj;
 	}
 
 }

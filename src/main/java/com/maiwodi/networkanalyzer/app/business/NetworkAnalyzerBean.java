@@ -53,7 +53,13 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		selectedOption = FOG;
 
 		// TODO: call ws and init from db
-		workers = new Workers();
+//		workers = new Workers();
+
+		String jsonStr = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/master/getAllWorkers");
+
+		workers = Utilities.unmarshall(jsonStr, Workers.class);
+
 		worker = new Worker();
 
 		cloudWorkers = new Workers();
