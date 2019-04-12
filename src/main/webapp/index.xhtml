@@ -63,7 +63,9 @@
 						icon="fa fa-remove"
 						process="@this"
 						update="@form"
-						actionListener="#{networkAnalyzerBean.workers.removeWorker(worker)}"/>
+						actionListener="#{networkAnalyzerBean.workers.removeWorker(worker)}">
+						<p:confirm header="Confirmation" message="Are you sure to remove this worker (#{worker.workerIP})?" icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
        			</p:column>
 			</p:dataTable>
 			
@@ -83,7 +85,9 @@
 						icon="fa fa-remove"
 						process="@this"
 						update="@form"
-						actionListener="#{networkAnalyzerBean.cloudWorkers.removeWorker(worker)}"/>
+						actionListener="#{networkAnalyzerBean.cloudWorkers.removeWorker(worker)}">
+						<p:confirm header="Confirmation" message="Are you sure to remove this worker (#{worker.workerIP})?" icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
        			</p:column>
 			</p:dataTable>
 			
@@ -131,6 +135,23 @@
 				</p:outputPanel>
 			</p:panelGrid> -->
 		</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+	        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+	    </p:confirmDialog> 
+		
 	</h:form>
 </h:body>
 
