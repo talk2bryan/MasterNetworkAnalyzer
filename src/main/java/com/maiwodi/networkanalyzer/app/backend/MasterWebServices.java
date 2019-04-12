@@ -153,6 +153,23 @@ public class MasterWebServices {
 	}
 
 	@POST
+	@Path("/postDeleteCloudWorker")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteCloudWorker(Worker cloud) {
+		String sql = "DELETE from Cloud WHERE BaseAddress = (?)";
+
+		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, cloud.getWorkerIP());
+
+			statement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Deleted a worker.";
+	}
+
+	@POST
 	@Path("/postAddCloudWorker")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
