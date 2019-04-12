@@ -101,6 +101,28 @@ public class MasterWebServices {
 		return workers;
 	}
 
+	@GET
+	@Path("/getAllCloudWorkers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Workers getAllCloudWorkers() {
+
+		Workers clouds = new Workers();
+
+		String sql = "SELECT * from Cloud";
+
+		try (Connection conn = this.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+			while (rs.next()) {
+				clouds.addWorker(new Worker(rs.getString("BaseAddress")));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return clouds;
+	}
+
 	@POST
 	@Path("/postAddWorker")
 	@Consumes(MediaType.APPLICATION_JSON)
