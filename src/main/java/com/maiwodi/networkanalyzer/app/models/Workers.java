@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.primefaces.json.JSONObject;
+
+import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
 import com.maiwodi.networkanalyzer.app.utils.Utilities;
 
 public class Workers implements Serializable {
@@ -26,6 +29,22 @@ public class Workers implements Serializable {
 
 	public void removeWorker(Worker worker) {
 		if (this.workers != null) {
+
+			JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postDeleteWorker",
+					new JSONObject(worker));
+
+			workers.remove(worker);
+		}
+
+		Utilities.showInfoMessage("Info", "Worker IP: " + worker.getWorkerIP() + " has been successfull removed");
+	}
+
+	public void removeCloudWorker(Worker worker) {
+		if (this.workers != null) {
+
+			JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postDeleteCloudWorker",
+					new JSONObject(worker));
+
 			workers.remove(worker);
 		}
 
