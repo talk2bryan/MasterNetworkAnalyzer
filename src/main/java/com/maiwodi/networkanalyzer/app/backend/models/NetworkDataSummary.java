@@ -27,6 +27,11 @@ public class NetworkDataSummary {
 		avgSpeedInMbps = ttlSpeedInMbps / networkDatas.size();
 	}
 
+	@Override
+	public String toString() {
+		return "NetworkDataSummary [avgRssiValue=" + avgRssiValue + ", avgSpeedInMbps=" + avgSpeedInMbps + "]";
+	}
+
 	public double getAvgRssiValue() {
 		return avgRssiValue;
 	}

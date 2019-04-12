@@ -34,6 +34,8 @@ public class WorkerWebServices {
 			networkDataSummary.analysis(networkDataList);
 		}
 
+		System.out.println(networkDataSummary);
+
 		return networkDataSummary;
 	}
 
