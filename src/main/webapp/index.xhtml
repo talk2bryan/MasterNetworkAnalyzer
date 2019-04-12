@@ -55,6 +55,7 @@
        				<p:commandButton 
 						value="Remove"
 						icon="fa fa-remove"
+						process="@this"
 						update="@form"
 						actionListener="#{networkAnalyzerBean.workers.removeWorker(worker)}"/>
        			</p:column>
