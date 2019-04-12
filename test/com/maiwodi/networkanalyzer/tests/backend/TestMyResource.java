@@ -17,7 +17,7 @@ import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
 class TestMyResource {
 
 	private static final Logger LOGGER = LogManager.getLogger(TestMyResource.class.getName());
-	
+
 	String jsonStr = "[ {\r\n" + "\r\n" + "        \"rssiValue\" : -55,\r\n" + "        \"speedInMbps\" : 72,\r\n"
 			+ "        \"timeStamp\" : \"1554603519\"\r\n" + "      }, {\r\n" + "        \"rssiValue\" : -55,\r\n"
 			+ "        \"speedInMbps\" : 72,\r\n" + "        \"timeStamp\" : \"1554603521\"\r\n" + "      }, {\r\n"
@@ -56,15 +56,26 @@ class TestMyResource {
 	void tearDown() throws Exception {
 	}
 
-//	@Test
-//	@Ignore
-//	void testAddWorker() {
-//		fail("Not yet implemented");
-//	}
+	// @Test
+	// @Ignore
+	// void testAddWorker() {
+	// fail("Not yet implemented");
+	// }
 
 	@Test
 	void testPostDataForAnalysis() {
 		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
+				"rest/myresource/post/data", jsonStr);
+
+		LOGGER.debug("Response: {}", response.readEntity(String.class));
+
+		assertEquals(response.getStatus(), 200);
+	}
+
+	@Test
+	void testCloudPostDataForAnalysis() {
+		Response response = JerseyClient.sendPostResponse(
+				"http://ec2-3-94-173-58.compute-1.amazonaws.com:8080/networkanalyzer-1.0-SNAPSHOT/",
 				"rest/myresource/post/data", jsonStr);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
