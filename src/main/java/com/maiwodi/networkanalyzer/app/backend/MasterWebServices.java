@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.models.Worker;
+import com.maiwodi.networkanalyzer.app.models.Workers;
 
 /**
  * Root resource (exposed at "master" path)
@@ -76,6 +77,28 @@ public class MasterWebServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	public DummyModel sampleJson() {
 		return new DummyModel("afd", "ss");
+	}
+
+	@GET
+	@Path("/getAllWorkers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Workers getAllWorkers() {
+
+		Workers workers = new Workers();
+
+		String sql = "SELECT * from Worker";
+
+		try (Connection conn = this.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+			while (rs.next()) {
+				workers.addWorker(new Worker(rs.getString("BaseAddress")));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return workers;
 	}
 
 	@POST
