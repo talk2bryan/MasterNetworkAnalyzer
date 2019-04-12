@@ -11,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.Consumes;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
+import com.maiwodi.networkanalyzer.app.models.Worker;
 
 /**
  * Root resource (exposed at "master" path)
@@ -79,11 +82,11 @@ public class MasterWebServices {
 	@Path("/postAddWorker")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String addWorker(String workerBaseAddress) {
+	public String addWorker(Worker worker) {
 		String sql = "INSERT INTO Worker(BaseAddress) VALUES(?)";
 
 		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setString(1, workerBaseAddress);
+			statement.setString(1, worker.getWorkerIP());
 
 			statement.executeUpdate();
 		} catch (Exception e) {
@@ -96,16 +99,17 @@ public class MasterWebServices {
 	@Path("/postAddCloudWorker")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String addCloudWorker(String workerBaseAddress) {
+	public String addCloudWorker(Worker worker) {
 		String sql = "INSERT INTO Cloud(BaseAddress) VALUES(?)";
 
 		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setString(1, workerBaseAddress);
+			statement.setString(1, worker.getWorkerIP());
 
 			statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return "Added new CloudWorker.";
 	}
 

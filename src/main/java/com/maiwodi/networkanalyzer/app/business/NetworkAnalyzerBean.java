@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.json.JSONObject;
 
 import com.maiwodi.networkanalyzer.app.models.Worker;
 import com.maiwodi.networkanalyzer.app.models.Workers;
@@ -76,7 +77,7 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	public void submitWorker() {
 
 		JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postAddWorker",
-				worker.getWorkerIP());
+				new JSONObject(this.getWorker()));
 
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 

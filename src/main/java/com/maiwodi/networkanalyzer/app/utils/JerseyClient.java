@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.json.JSONObject;
 
 public class JerseyClient {
 
@@ -34,8 +35,15 @@ public class JerseyClient {
 		return output;
 	}
 
+	public static Response sendPostResponse(String base, String path, JSONObject json) {
+
+		String jsonStr = json.toString();
+
+		return sendPostResponse(base, path, jsonStr);
+	}
+
 	public static Response sendPostResponse(String base, String path, String json) {
-		LOGGER.debug("The URL of POST is: {}, and the XML to POST is {}", base + path, json);
+		LOGGER.debug("The URL of POST is: {}, and the JSON to POST is {}", base + path, json);
 
 		Client client = ClientBuilder.newClient();
 
