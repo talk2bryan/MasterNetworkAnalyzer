@@ -1,5 +1,8 @@
 package com.maiwodi.networkanalyzer.app.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -29,8 +32,28 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	private Worker worker;
 
+	private Workers cloudWorkers;
+
+	private Worker cloudWorker;
+
+	private List<String> options;
+
+	private String selectedOption;
+
+	private static final String CLOUD = "cloud";
+
+	private static final String FOG = "fog";
+
 	@PostConstruct
 	public void loadPage() {
+
+		options = new ArrayList<>();
+
+		options.add(CLOUD);
+		options.add(FOG);
+		selectedOption = FOG;
+
+		// TODO: call ws and init from db
 		workers = new Workers();
 		worker = new Worker();
 	}
@@ -83,6 +106,38 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	public void setWorker(Worker worker) {
 		this.worker = worker;
+	}
+
+	public Worker getCloudWorker() {
+		return cloudWorker;
+	}
+
+	public void setCloudWorker(Worker cloudWorker) {
+		this.cloudWorker = cloudWorker;
+	}
+
+	public Workers getCloudWorkers() {
+		return cloudWorkers;
+	}
+
+	public void setCloudWorkers(Workers cloudWorkers) {
+		this.cloudWorkers = cloudWorkers;
+	}
+
+	public List<String> getOptions() {
+		return options;
+	}
+
+	public void setOptions(List<String> options) {
+		this.options = options;
+	}
+
+	public String getSelectedOption() {
+		return selectedOption;
+	}
+
+	public void setSelectedOption(String selectedOption) {
+		this.selectedOption = selectedOption;
 	}
 
 }
