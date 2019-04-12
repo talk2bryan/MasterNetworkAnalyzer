@@ -18,10 +18,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.condition.JRE;
+
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
+import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
 import com.maiwodi.networkanalyzer.app.models.Worker;
 import com.maiwodi.networkanalyzer.app.models.Workers;
+import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
+import com.maiwodi.networkanalyzer.app.utils.Utilities;
 
 /**
  * Root resource (exposed at "master" path)
@@ -237,6 +242,24 @@ public class MasterWebServices {
 			System.out.println(e.getMessage());
 		}
 		return null;
+	}
+
+	@GET
+	@Path("/analyze")
+//	@Produces(MediaType.APPLICATION_JSON)
+	public void invokeWorkderAnalyzeNetworkData() {
+
+		List<NetworkData> networkDataList = Utilities.unmarshall(JerseyClient.sendGetResponse(
+				"http://localhost:8080/networkanalyzer/", "rest/master/readNetworkDataTable"), List.class);
+
+		Workers workers = Utilities.unmarshall(
+				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/getAllWorkers"),
+				Workers.class);
+
+		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
+				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
+
+		return;
 	}
 
 }
