@@ -1,5 +1,8 @@
 package com.maiwodi.networkanalyzer.app.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -29,10 +32,45 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	private Worker worker;
 
+	private Workers cloudWorkers;
+
+	private List<String> options;
+
+	private String selectedOption;
+
+	private static final String CLOUD = "cloud";
+
+	private static final String FOG = "fog";
+
 	@PostConstruct
 	public void loadPage() {
+
+		options = new ArrayList<>();
+
+		options.add(CLOUD);
+		options.add(FOG);
+		selectedOption = FOG;
+
+		// TODO: call ws and init from db
 		workers = new Workers();
 		worker = new Worker();
+
+		cloudWorkers = new Workers();
+	}
+
+	public void submitWorkerBasedOnOption() {
+		switch (selectedOption) {
+		case CLOUD:
+			submitCloudWorker();
+			break;
+
+		case FOG:
+			submitWorker();
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	public void submitWorker() {
@@ -41,6 +79,14 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		// reset after submit
 		worker = new Worker();
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+	}
+
+	public void submitCloudWorker() {
+		cloudWorkers.addWorker(worker);
+
+		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+
+		worker = new Worker();
 	}
 
 	/*
@@ -82,6 +128,30 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	public void setWorker(Worker worker) {
 		this.worker = worker;
+	}
+
+	public Workers getCloudWorkers() {
+		return cloudWorkers;
+	}
+
+	public void setCloudWorkers(Workers cloudWorkers) {
+		this.cloudWorkers = cloudWorkers;
+	}
+
+	public List<String> getOptions() {
+		return options;
+	}
+
+	public void setOptions(List<String> options) {
+		this.options = options;
+	}
+
+	public String getSelectedOption() {
+		return selectedOption;
+	}
+
+	public void setSelectedOption(String selectedOption) {
+		this.selectedOption = selectedOption;
 	}
 
 }

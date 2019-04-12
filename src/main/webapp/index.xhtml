@@ -24,12 +24,18 @@
 	<h:form>
 		<div class="ui-fluid">
 		
-			<p:panelGrid columns="3"
-						columnClasses="ui-grid-col-2,ui-grid-col-6"
+			<p:panelGrid columns="4"
+						columnClasses="ui-grid-col-2, ui-grid-col-2,ui-grid-col-6"
 						layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
-				<p:outputLabel value="Enter Worker IP"/>
+				<p:outputLabel value="Enter Worker's base address"/>
 				
-				<p:inputText placeholder="Please enter worker IP"
+				
+				<p:selectOneMenu value="#{networkAnalyzerBean.selectedOption}">
+		            <f:selectItem itemLabel="Select One" itemValue="" />
+		            <f:selectItems value="#{networkAnalyzerBean.options}" />
+		        </p:selectOneMenu>
+				
+				<p:inputText placeholder="Please enter worker base address. (e.g. localhost:8080/networkanalyzer)"
 							required="true"
 							validatorMessage="Worker IP address is required"
 							value="#{networkAnalyzerBean.worker.workerIP}">
@@ -37,7 +43,7 @@
 				
 				<p:commandButton value="Submit" 
 							icon="fa fa-send"
-							actionListener="#{networkAnalyzerBean.submitWorker()}"
+							actionListener="#{networkAnalyzerBean.submitWorkerBasedOnOption()}"
 							update="@form" />
 			</p:panelGrid>
 			
@@ -47,7 +53,7 @@
 						value="#{networkAnalyzerBean.workers.workers}"
 						var="worker">
 				
-				<p:column headerText="Worker IP Adresses" styleClass="Wid90">
+				<p:column headerText="Worker Base Adresses" styleClass="Wid90">
        				<h:outputText value="#{worker.workerIP}" />
        			</p:column>
        			
@@ -58,6 +64,26 @@
 						process="@this"
 						update="@form"
 						actionListener="#{networkAnalyzerBean.workers.removeWorker(worker)}"/>
+       			</p:column>
+			</p:dataTable>
+			
+			<p:spacer height="10"></p:spacer>
+			
+			<p:dataTable id="cloudWorkersTable"
+						value="#{networkAnalyzerBean.cloudWorkers.workers}"
+						var="worker">
+				
+				<p:column headerText="Cloud Worker Base Adresses" styleClass="Wid90">
+       				<h:outputText value="#{worker.workerIP}" />
+       			</p:column>
+       			
+       			<p:column headerText="Action">
+       				<p:commandButton 
+						value="Remove"
+						icon="fa fa-remove"
+						process="@this"
+						update="@form"
+						actionListener="#{networkAnalyzerBean.cloudWorkers.removeWorker(worker)}"/>
        			</p:column>
 			</p:dataTable>
 			
