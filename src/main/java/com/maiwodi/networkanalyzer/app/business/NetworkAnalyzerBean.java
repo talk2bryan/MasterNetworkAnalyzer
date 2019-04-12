@@ -54,15 +54,14 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 		// TODO: call ws and init from db
 //		workers = new Workers();
+		workers = Utilities.unmarshall(
+				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/getAllWorkers"),
+				Workers.class);
 
-		String jsonStr = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
-				"rest/master/getAllWorkers");
-
-		workers = Utilities.unmarshall(jsonStr, Workers.class);
+		cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/master/getAllCloudWorkers"), Workers.class);
 
 		worker = new Worker();
-
-		cloudWorkers = new Workers();
 	}
 
 	public void submitWorkerBasedOnOption() {
@@ -92,6 +91,10 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	}
 
 	public void submitCloudWorker() {
+
+		JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postAddCloudWorker",
+				new JSONObject(this.getWorker()));
+
 		cloudWorkers.addWorker(worker);
 
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
