@@ -65,7 +65,7 @@ class TestMyResource {
 	@Test
 	void testPostDataForAnalysis() {
 		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
-				"rest/myresource/post/data", jsonStr);
+				"rest/master/post/data", jsonStr);
 
 		LOGGER.debug("Response: {}", response.readEntity(String.class));
 
