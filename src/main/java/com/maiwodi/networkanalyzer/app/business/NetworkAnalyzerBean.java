@@ -34,8 +34,6 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	private Workers cloudWorkers;
 
-	private Worker cloudWorker;
-
 	private List<String> options;
 
 	private String selectedOption;
@@ -56,6 +54,23 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		// TODO: call ws and init from db
 		workers = new Workers();
 		worker = new Worker();
+
+		cloudWorkers = new Workers();
+	}
+
+	public void submitWorkerBasedOnOption() {
+		switch (selectedOption) {
+		case CLOUD:
+			submitCloudWorker();
+			break;
+
+		case FOG:
+			submitWorker();
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	public void submitWorker() {
@@ -64,6 +79,14 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 
 		// reset after submit
+		worker = new Worker();
+	}
+
+	public void submitCloudWorker() {
+		cloudWorkers.addWorker(worker);
+
+		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
+
 		worker = new Worker();
 	}
 
@@ -106,14 +129,6 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	public void setWorker(Worker worker) {
 		this.worker = worker;
-	}
-
-	public Worker getCloudWorker() {
-		return cloudWorker;
-	}
-
-	public void setCloudWorker(Worker cloudWorker) {
-		this.cloudWorker = cloudWorker;
 	}
 
 	public Workers getCloudWorkers() {
