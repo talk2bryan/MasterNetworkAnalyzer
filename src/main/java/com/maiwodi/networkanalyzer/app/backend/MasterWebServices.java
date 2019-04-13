@@ -199,14 +199,15 @@ public class MasterWebServices {
 	public String postDataForAnalysis(List<NetworkData> networkDataList) {
 
 		if (null != networkDataList) {
-			String sql = "INSERT INTO " + "NetworkData(TimeStamp, rssiValue, SpeedInMbps) " + "VALUES(?, ?, ?)";
+			String sql = "INSERT INTO " + "NetworkData(downloadSpeed, TimeStamp, rssiValue, SpeedInMbps) " + "VALUES(?, ?, ?, ?)";
 			// Add code to process data.
 			try (Connection connection = this.connect();) {
 				for (NetworkData networkData : networkDataList) {
 					PreparedStatement statement = connection.prepareStatement(sql);
-					statement.setString(1, networkData.getTimeStamp());
-					statement.setInt(2, networkData.getRssiValue());
-					statement.setInt(3, networkData.getSpeedInMbps());
+					statement.setDouble(1, networkData.getDownloadSpeed());
+					statement.setString(2, networkData.getTimeStamp());
+					statement.setInt(3, networkData.getRssiValue());
+					statement.setInt(4, networkData.getSpeedInMbps());
 
 					statement.executeUpdate();
 				}
@@ -233,8 +234,11 @@ public class MasterWebServices {
 				ResultSet rs = stmt.executeQuery(sql)) {
 			List<NetworkData> networkDataList = new ArrayList<NetworkData>();
 			while (rs.next()) {
-				NetworkData data = new NetworkData(rs.getInt("downloadSpeed"), rs.getInt("rssiValue"),
-						rs.getInt("SpeedInMbps"), rs.getString("TimeStamp"));
+				NetworkData data = new NetworkData(
+						rs.getDouble("downloadSpeed"), 
+						rs.getInt("rssiValue"),
+						rs.getInt("SpeedInMbps"), 
+						rs.getString("TimeStamp"));
 				networkDataList.add(data);
 			}
 			return networkDataList;
@@ -270,11 +274,24 @@ public class MasterWebServices {
 		try (Connection connection = this.connect(); 
 				PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.executeUpdate();
+			// TODO: remove this call
+			printDataRepoDEBUG();
 			return "Cleaned up NetworkData repository";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	private void printDataRepoDEBUG() {
+		List<NetworkData> datas = readNetworkDataRepository();
+		if (datas.size() > 0) {
+			for (NetworkData networkData : datas) {
+				System.out.println("DLS: " + networkData.getDownloadSpeed());
+			}
+		} else {
+			System.out.println("Empty repo");
+		}
 	}
 	
 
