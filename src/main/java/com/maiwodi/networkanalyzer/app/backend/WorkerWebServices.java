@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.maiwodi.networkanalyzer.app.backend.models.MonteCarloParam;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
 
@@ -37,6 +38,19 @@ public class WorkerWebServices {
 		System.out.println(networkDataSummary);
 
 		return networkDataSummary;
+	}
+
+	@POST
+	@Path("post/mcSim")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public double mcSimulation(MonteCarloParam monteCarloParam) {
+
+		double result = MonteCarloSimulation.mcSimulation(monteCarloParam.getK(), monteCarloParam.getT(),
+				monteCarloParam.getS(), monteCarloParam.getR(), 0.4, 0.0, monteCarloParam.getN(),
+				monteCarloParam.getM());
+
+		return result;
 	}
 
 }
