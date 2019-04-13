@@ -233,8 +233,8 @@ public class MasterWebServices {
 				ResultSet rs = stmt.executeQuery(sql)) {
 			List<NetworkData> networkDataList = new ArrayList<NetworkData>();
 			while (rs.next()) {
-				NetworkData data = new NetworkData(rs.getInt("rssiValue"), rs.getInt("SpeedInMbps"),
-						rs.getString("TimeStamp"));
+				NetworkData data = new NetworkData(rs.getInt("downloadSpeed"), rs.getInt("rssiValue"),
+						rs.getInt("SpeedInMbps"), rs.getString("TimeStamp"));
 				networkDataList.add(data);
 			}
 			return networkDataList;
