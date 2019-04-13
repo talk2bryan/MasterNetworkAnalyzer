@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.Consumes;
@@ -17,8 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import org.junit.jupiter.api.condition.JRE;
 
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
@@ -250,11 +250,15 @@ public class MasterWebServices {
 
 	@GET
 	@Path("/analyze")
-//	@Produces(MediaType.APPLICATION_JSON)
-	public void invokeWorkderAnalyzeNetworkData() {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, String> invokeWorkderAnalyzeNetworkData() {
 
-		List<NetworkData> networkDataList = Utilities.unmarshall(JerseyClient.sendGetResponse(
-				"http://localhost:8080/networkanalyzer/", "rest/master/readNetworkDataTable"), List.class);
+		Map<String, String> map = new HashMap<>();
+
+		long executionTime = 0;
+
+		String networkDataStr = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/master/readNetworkDataTable");
 
 		Workers workers = Utilities.unmarshall(
 				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/getAllWorkers"),
@@ -263,10 +267,22 @@ public class MasterWebServices {
 		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
 				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
 
-		return;
+		long startTime = System.nanoTime();
+
+		// TODO: for testing purposes only
+		Worker worker = workers.getWorkers().get(0);
+
+		JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data", networkDataStr);
+
+		long stopTime = System.nanoTime();
+
+		executionTime = stopTime - startTime;
+
+		map.put("executionTime", executionTime + "");
+
+		return map;
 	}
-	
-	
+
 	@GET
 	@Path("/cleanupNetworkData")
 	public String cleanupNetworkDataRepository() {
@@ -293,6 +309,5 @@ public class MasterWebServices {
 			System.out.println("Empty repo");
 		}
 	}
-	
 
 }
