@@ -249,8 +249,8 @@ public class MasterWebServices {
 //	@Produces(MediaType.APPLICATION_JSON)
 	public void invokeWorkderAnalyzeNetworkData() {
 
-		List<NetworkData> networkDataList = Utilities.unmarshall(JerseyClient.sendGetResponse(
-				"http://localhost:8080/networkanalyzer/", "rest/master/readNetworkDataTable"), List.class);
+		String networkDataStr = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/master/readNetworkDataTable");
 
 		Workers workers = Utilities.unmarshall(
 				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/getAllWorkers"),
@@ -259,16 +259,19 @@ public class MasterWebServices {
 		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
 				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
 
+		// TODO: for testing purposes only
+		Worker worker = workers.getWorkers().get(0);
+
+		JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data", networkDataStr);
+
 		return;
 	}
-	
-	
+
 	@GET
 	@Path("/cleanupNetworkData")
 	public String cleanupNetworkDataRepository() {
 		String sql = "DELETE FROM NetworkData";
-		try (Connection connection = this.connect(); 
-				PreparedStatement statement = connection.prepareStatement(sql)) {
+		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.executeUpdate();
 			return "Cleaned up NetworkData repository";
 		} catch (Exception e) {
@@ -276,6 +279,5 @@ public class MasterWebServices {
 		}
 		return null;
 	}
-	
 
 }
