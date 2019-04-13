@@ -272,23 +272,28 @@ public class MasterWebServices {
 		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
 				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
 
-		long startTime = System.nanoTime();
-
 		// TODO: for testing purposes only
 		Worker worker = workers.getWorkers().get(0);
+		Worker cloud = cloudWorkers.getWorkers().get(0);
 
-		long stopTime = System.nanoTime();
+		long startTime = System.nanoTime();
 
 //		return map;
-
-		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/worker/post/data",
+		Response response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data",
 				networkDataStr);
+
+//		Response response = JerseyClient.sendPostResponse(cloud.getWorkerIP(), "rest/worker/post/data",
+//				networkDataStr);
+
+		long stopTime = System.nanoTime();
 
 		executionTime = stopTime - startTime;
 
 		map.put("executionTime", executionTime + "");
 
 		LOGGER.info("executionTime: {} ns", executionTime);
+		List<NetworkData> networkDataList = Utilities.unmarshall(networkDataStr, List.class);
+		LOGGER.info("size of network data: {}", networkDataList.size());
 
 		return response.readEntity(NetworkDataSummary.class);
 	}
