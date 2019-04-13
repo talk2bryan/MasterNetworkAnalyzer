@@ -6,6 +6,8 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class NetworkData implements Serializable {
 
 	/**
@@ -54,6 +56,7 @@ public class NetworkData implements Serializable {
 		this.speedInMbps = speedInMbps;
 	}
 
+	@JsonIgnore
 	public Date getConvertedTimestamp() {
 		DateTime date = new DateTime(Long.valueOf(timeStamp), DateTimeZone.UTC);
 
