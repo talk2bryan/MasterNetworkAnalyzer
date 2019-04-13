@@ -261,5 +261,21 @@ public class MasterWebServices {
 
 		return;
 	}
+	
+	
+	@GET
+	@Path("/cleanupNetworkData")
+	public String cleanupNetworkDataRepository() {
+		String sql = "DELETE FROM NetworkData";
+		try (Connection connection = this.connect(); 
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.executeUpdate();
+			return "Cleaned up NetworkData repository";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 }
