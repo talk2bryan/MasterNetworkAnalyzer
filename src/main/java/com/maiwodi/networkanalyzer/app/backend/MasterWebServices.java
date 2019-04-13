@@ -18,8 +18,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.junit.jupiter.api.condition.JRE;
-
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
