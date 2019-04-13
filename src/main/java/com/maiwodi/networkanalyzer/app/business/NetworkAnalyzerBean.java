@@ -84,6 +84,8 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postAddWorker",
 				new JSONObject(this.getWorker()));
 
+		workers.addWorker(worker);
+
 		Utilities.showInfoMessage("Worker Submitted", "The submitted worker IP is " + worker.getWorkerIP());
 
 		// reset after submit
