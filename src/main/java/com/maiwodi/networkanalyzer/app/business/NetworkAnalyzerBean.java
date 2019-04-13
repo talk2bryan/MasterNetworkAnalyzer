@@ -92,6 +92,15 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 		worker = new Worker();
 	}
 
+	/**
+	 * 
+	 */
+	public void clearNetworkData() {
+		JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/cleanupNetworkData");
+
+		Utilities.showInfoMessage("Success", "Network data has been reset");
+	}
+
 	public void submitCloudWorker() {
 
 		JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/master/postAddCloudWorker",
