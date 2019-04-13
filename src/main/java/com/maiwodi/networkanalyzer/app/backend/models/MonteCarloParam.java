@@ -5,8 +5,8 @@ public class MonteCarloParam {
 	double K = 10;
 	double T = 1 / 1.0;
 	double r = 0.12;
-	int N = 1000;
-	int M = 100000;
+	int N = 100;
+	int M = 1000;
 
 	public MonteCarloParam() {
 		super();
