@@ -90,16 +90,55 @@
 					</p:commandButton>
        			</p:column>
 			</p:dataTable>
+			
+			<p:spacer height="10"></p:spacer>
+			
+			<p:dataTable
+						value="#{networkAnalyzerBean.networkDataList}"
+						scrollHeight="500"
+						scrollable="true"
+						var="netData">
+						
+				<f:facet name="header">
+					Network Data
+				</f:facet>
+				
+				<p:column headerText="Download Speed">
+       				<h:outputText value="#{netData.downloadSpeed}" />
+       			</p:column>
+       			
+       			<p:column headerText="RSSI Value">
+       				<h:outputText value="#{netData.rssiValue}" />
+       			</p:column>
+       			
+       			<p:column headerText="Speed in Mbps">
+       				<h:outputText value="#{netData.speedInMbps}" />
+       			</p:column>
+       			
+       			<p:column headerText="Timestamp">
+       				<h:outputText value="#{netData.convertedTimestamp}">
+       					<f:convertDateTime pattern="dd MMM yyyy HH:mm:ss:SSS Z" />
+       				</h:outputText>
+       			</p:column>
+       			
+       			<f:facet name="footer">
+       				<p:commandButton 
+						value="Reset Network Data"
+						icon="fa fa-history"
+						process="@this"
+						update="@form"
+						actionListener="#{networkAnalyzerBean.clearNetworkData()}">
+						<p:confirm header="Confirmation" message="Are you sure to clean up ?" icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+       			</f:facet>
+       			
+			</p:dataTable>
+			
+			
+			
 		</div>
 		
-		<p:commandButton 
-			value="Reset Network Data"
-			icon="fa fa-history"
-			process="@this"
-			update="@form"
-			actionListener="#{networkAnalyzerBean.clearNetworkData()}">
-			<p:confirm header="Confirmation" message="Are you sure to clean up ?" icon="pi pi-exclamation-triangle" />
-		</p:commandButton>
+		
 		
 		
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

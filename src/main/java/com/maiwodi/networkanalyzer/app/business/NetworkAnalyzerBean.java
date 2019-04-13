@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.json.JSONObject;
 
+import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.models.Worker;
 import com.maiwodi.networkanalyzer.app.models.Workers;
 import com.maiwodi.networkanalyzer.app.utils.AbstractPageBean;
@@ -43,6 +44,8 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	private static final String FOG = "fog";
 
+	private List<NetworkData> networkDataList;
+
 	@PostConstruct
 	public void loadPage() {
 
@@ -60,6 +63,9 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 		cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
 				"rest/master/getAllCloudWorkers"), Workers.class);
+
+		networkDataList = Utilities.unmarshall(JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/master/readNetworkDataTable"), List.class);
 
 		worker = new Worker();
 	}
@@ -97,6 +103,9 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 	 */
 	public void clearNetworkData() {
 		JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/cleanupNetworkData");
+
+		networkDataList = Utilities.unmarshall(JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
+				"rest/master/readNetworkDataTable"), List.class);
 
 		Utilities.showInfoMessage("Success", "Network data has been reset");
 	}
@@ -163,6 +172,14 @@ public class NetworkAnalyzerBean extends AbstractPageBean {
 
 	public void setSelectedOption(String selectedOption) {
 		this.selectedOption = selectedOption;
+	}
+
+	public List<NetworkData> getNetworkDataList() {
+		return networkDataList;
+	}
+
+	public void setNetworkDataList(List<NetworkData> networkDataList) {
+		this.networkDataList = networkDataList;
 	}
 
 }

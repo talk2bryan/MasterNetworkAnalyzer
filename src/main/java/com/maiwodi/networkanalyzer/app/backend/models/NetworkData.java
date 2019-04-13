@@ -1,6 +1,10 @@
 package com.maiwodi.networkanalyzer.app.backend.models;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class NetworkData implements Serializable {
 
@@ -48,6 +52,13 @@ public class NetworkData implements Serializable {
 
 	public void setSpeedInMbps(int speedInMbps) {
 		this.speedInMbps = speedInMbps;
+	}
+
+	public Date getConvertedTimestamp() {
+		DateTime date = new DateTime(Long.valueOf(timeStamp), DateTimeZone.UTC);
+
+		return date.toDate();
+
 	}
 
 	public String getTimeStamp() {
