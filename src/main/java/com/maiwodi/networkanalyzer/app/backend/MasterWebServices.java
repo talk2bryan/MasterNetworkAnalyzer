@@ -390,7 +390,7 @@ public class MasterWebServices {
 
 		switch (device) {
 		case "fog":
-			response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data", monteCarloParam);
+			response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/mcSim", monteCarloParam);
 			break;
 		case "master":
 			response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/worker/post/mcSim",
