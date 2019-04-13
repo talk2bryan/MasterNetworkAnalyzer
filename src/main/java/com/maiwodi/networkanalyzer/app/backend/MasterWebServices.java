@@ -281,14 +281,16 @@ public class MasterWebServices {
 
 //		return map;
 
-		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/worker/post/data",
-				networkDataStr);
+		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
+				"rest/worker/post/data", networkDataStr);
 
 		executionTime = stopTime - startTime;
 
 		map.put("executionTime", executionTime + "");
 
 		LOGGER.info("executionTime: {} ns", executionTime);
+		List<NetworkData> networkDataList = Utilities.unmarshall(networkDataStr, List.class);
+		LOGGER.info("size of network data: {}", networkDataList.size());
 
 		return response.readEntity(NetworkDataSummary.class);
 	}
