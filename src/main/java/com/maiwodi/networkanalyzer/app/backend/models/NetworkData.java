@@ -9,6 +9,7 @@ public class NetworkData implements Serializable {
 	 */
 	private static final long serialVersionUID = -420440970134215957L;
 
+	private double downloadSpeed;
 	private int rssiValue;
 	private int speedInMbps;
 	private String timeStamp;
@@ -17,11 +18,20 @@ public class NetworkData implements Serializable {
 		super();
 	}
 
-	public NetworkData(int rssiValue, int speedInMbps, String timeStamp) {
+	public NetworkData(double downloadSpeed, int rssiValue, int speedInMbps, String timeStamp) {
 		super();
+		this.downloadSpeed = downloadSpeed;
 		this.rssiValue = rssiValue;
 		this.speedInMbps = speedInMbps;
 		this.timeStamp = timeStamp;
+	}
+
+	public double getDownloadSpeed() {
+		return downloadSpeed;
+	}
+
+	public void setDownloadSpeed(double downloadSpeed) {
+		this.downloadSpeed = downloadSpeed;
 	}
 
 	public int getRssiValue() {
