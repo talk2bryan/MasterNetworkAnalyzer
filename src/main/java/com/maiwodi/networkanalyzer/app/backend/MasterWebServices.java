@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
+import com.maiwodi.networkanalyzer.app.backend.models.MonteCarloParam;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
 import com.maiwodi.networkanalyzer.app.models.Worker;
@@ -359,6 +360,65 @@ public class MasterWebServices {
 		LOGGER.info("size of network data: {}", networkDataList.size());
 
 		return response.readEntity(NetworkDataSummary.class);
+	}
+
+	@POST
+	@Path("/mcSim/{device}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, String> invokeMCSim(@PathParam("device") String device, String monteCarloParam) {
+
+		Map<String, String> map = new HashMap<>();
+
+		long executionTime = 0;
+
+		Workers workers = Utilities.unmarshall(
+				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/getAllWorkers"),
+				Workers.class);
+
+		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
+				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
+
+		// TODO: for testing purposes only
+		Worker worker = workers.getWorkers().get(0);
+		Worker cloud = cloudWorkers.getWorkers().get(0);
+
+		long startTime = System.nanoTime();
+
+//		return map;
+
+		Response response = null;
+
+		switch (device) {
+		case "fog":
+			response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data", monteCarloParam);
+			break;
+		case "master":
+			response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/worker/post/mcSim",
+					monteCarloParam);
+			break;
+
+		case "cloud":
+			response = JerseyClient.sendPostResponse(cloud.getWorkerIP(), "rest/worker/post/mcSim", monteCarloParam);
+			break;
+
+		default:
+//			response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/worker/post/mcSim",
+//					monteCarloParam);
+			break;
+		}
+
+		long stopTime = System.nanoTime();
+
+		executionTime = stopTime - startTime;
+
+		map.put("executionTime", executionTime + "");
+		map.put("optionValue", response.readEntity(Double.class).toString());
+		map.put("monteCarloParam", monteCarloParam);
+
+		LOGGER.info("executionTime: {} ns", executionTime);
+
+		return map;
 	}
 
 	@GET
