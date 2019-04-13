@@ -136,23 +136,32 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.11.2</version>
 		</dependency>
-		
+
 		<dependency>
-	        <groupId>org.junit.jupiter</groupId>
-	        <artifactId>junit-jupiter-engine</artifactId>
-	        <version>5.3.1</version>
-	    </dependency>
-	    
-	    
-	    
-	    <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
-		<dependency>
-		    <groupId>joda-time</groupId>
-		    <artifactId>joda-time</artifactId>
-		    <version>2.10.1</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.3.1</version>
 		</dependency>
-			    
-				
+
+
+
+		<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.2</version>
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>
