@@ -21,6 +21,25 @@
 	
 		<p:lineChart model="#{reportViewBean.lineModel}"
 			style="width: 100%; height: 500px;" />
+			
+			
+			
+		<p:panelGrid columns="3">
+		    <f:facet name="header">
+		       Network Data Summary
+		    </f:facet>
+		     
+		    <h:outputText value="Average Download Speed" />
+		    <h:outputText value="Average Rssi Value" />
+		    <h:outputText value="Average Speed in Mbps" />
+
+		    <h:outputText value="#{reportViewBean.networkDataSummary.avgDownloadSpeed}" />
+		     
+		    <h:outputText value="#{reportViewBean.networkDataSummary.avgRssiValue}" />
+		     
+		    <h:outputText value="#{reportViewBean.networkDataSummary.avgSpeedInMbps}" />
+		     
+		</p:panelGrid>
 	</h:form>
 
 </h:body>

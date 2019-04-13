@@ -20,6 +20,10 @@ import org.primefaces.model.charts.optionconfig.title.Title;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
+import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
+import com.maiwodi.networkanalyzer.app.models.Workers;
+import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
+import com.maiwodi.networkanalyzer.app.utils.Utilities;
 
 @Named("reportViewBean")
 @ViewScoped
@@ -30,6 +34,8 @@ public class ReportViewBean implements Serializable {
 	private static final long serialVersionUID = 5920874013441954154L;
 
 	private LineChartModel lineModel;
+
+	private NetworkDataSummary networkDataSummary;
 
 	private String json = "[ {\r\n" + "      \"downloadSpeed\" : 0.4800998608,\r\n" + "      \"rssiValue\" : -43,\r\n"
 			+ "      \"speedInMbps\" : 300,\r\n" + "      \"timeStamp\" : \"1555115409\"\r\n" + "    }, {\r\n"
@@ -106,7 +112,17 @@ public class ReportViewBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		createLineModel();
+
+		NetworkData[] networkDatas = Utilities.unmarshall(JerseyClient.sendGetResponse(
+				"http://localhost:8080/networkanalyzer/", "rest/master/readNetworkDataTable"), NetworkData[].class);
+
+		
+		// TODO: read from another table
+		networkDataSummary = Utilities.unmarshall(
+				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/analyze"),
+				NetworkDataSummary.class);
+
+		createLineModel(networkDatas);
 	}
 
 	// TODO: Test. remove it later
@@ -230,6 +246,14 @@ public class ReportViewBean implements Serializable {
 
 	public void setJson(String json) {
 		this.json = json;
+	}
+
+	public NetworkDataSummary getNetworkDataSummary() {
+		return networkDataSummary;
+	}
+
+	public void setNetworkDataSummary(NetworkDataSummary networkDataSummary) {
+		this.networkDataSummary = networkDataSummary;
 	}
 
 }

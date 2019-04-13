@@ -19,10 +19,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
+import com.maiwodi.networkanalyzer.app.business.NetworkAnalyzerBean;
 import com.maiwodi.networkanalyzer.app.models.Worker;
 import com.maiwodi.networkanalyzer.app.models.Workers;
 import com.maiwodi.networkanalyzer.app.utils.JerseyClient;
@@ -33,6 +38,8 @@ import com.maiwodi.networkanalyzer.app.utils.Utilities;
  */
 @Path("master")
 public class MasterWebServices {
+
+	private static final Logger LOGGER = LogManager.getLogger(MasterWebServices.class.getName());
 
 	Properties prop = new Properties();
 	InputStream input = null;
@@ -199,7 +206,8 @@ public class MasterWebServices {
 	public String postDataForAnalysis(List<NetworkData> networkDataList) {
 
 		if (null != networkDataList) {
-			String sql = "INSERT INTO " + "NetworkData(downloadSpeed, TimeStamp, rssiValue, SpeedInMbps) " + "VALUES(?, ?, ?, ?)";
+			String sql = "INSERT INTO " + "NetworkData(downloadSpeed, TimeStamp, rssiValue, SpeedInMbps) "
+					+ "VALUES(?, ?, ?, ?)";
 			// Add code to process data.
 			try (Connection connection = this.connect();) {
 				for (NetworkData networkData : networkDataList) {
@@ -234,11 +242,8 @@ public class MasterWebServices {
 				ResultSet rs = stmt.executeQuery(sql)) {
 			List<NetworkData> networkDataList = new ArrayList<NetworkData>();
 			while (rs.next()) {
-				NetworkData data = new NetworkData(
-						rs.getDouble("downloadSpeed"), 
-						rs.getInt("rssiValue"),
-						rs.getInt("SpeedInMbps"), 
-						rs.getString("TimeStamp"));
+				NetworkData data = new NetworkData(rs.getDouble("downloadSpeed"), rs.getInt("rssiValue"),
+						rs.getInt("SpeedInMbps"), rs.getString("TimeStamp"));
 				networkDataList.add(data);
 			}
 			return networkDataList;
@@ -251,7 +256,7 @@ public class MasterWebServices {
 	@GET
 	@Path("/analyze")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, String> invokeWorkderAnalyzeNetworkData() {
+	public NetworkDataSummary invokeWorkderAnalyzeNetworkData() {
 
 		Map<String, String> map = new HashMap<>();
 
@@ -272,23 +277,27 @@ public class MasterWebServices {
 		// TODO: for testing purposes only
 		Worker worker = workers.getWorkers().get(0);
 
-		JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data", networkDataStr);
-
 		long stopTime = System.nanoTime();
+
+//		return map;
+
+		Response response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/", "rest/worker/post/data",
+				networkDataStr);
 
 		executionTime = stopTime - startTime;
 
 		map.put("executionTime", executionTime + "");
 
-		return map;
+		LOGGER.info("executionTime: {} ns", executionTime);
+
+		return response.readEntity(NetworkDataSummary.class);
 	}
 
 	@GET
 	@Path("/cleanupNetworkData")
 	public String cleanupNetworkDataRepository() {
 		String sql = "DELETE FROM NetworkData";
-		try (Connection connection = this.connect(); 
-				PreparedStatement statement = connection.prepareStatement(sql)) {
+		try (Connection connection = this.connect(); PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.executeUpdate();
 			// TODO: remove this call
 			printDataRepoDEBUG();
@@ -298,7 +307,7 @@ public class MasterWebServices {
 		}
 		return null;
 	}
-	
+
 	private void printDataRepoDEBUG() {
 		List<NetworkData> datas = readNetworkDataRepository();
 		if (datas.size() > 0) {
