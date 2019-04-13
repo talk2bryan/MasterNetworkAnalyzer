@@ -92,6 +92,15 @@
 			</p:dataTable>
 		</div>
 		
+		<p:commandButton 
+			value="Reset Network Data"
+			icon="fa fa-history"
+			process="@this"
+			update="@form"
+			actionListener="#{networkAnalyzerBean.}">
+			<p:confirm header="Confirmation" message="Are you sure to clean up ?" icon="pi pi-exclamation-triangle" />
+		</p:commandButton>
+		
 		
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 	        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
