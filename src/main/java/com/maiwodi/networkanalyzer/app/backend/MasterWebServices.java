@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.Consumes;
@@ -244,8 +246,12 @@ public class MasterWebServices {
 
 	@GET
 	@Path("/analyze")
-//	@Produces(MediaType.APPLICATION_JSON)
-	public void invokeWorkderAnalyzeNetworkData() {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, String> invokeWorkderAnalyzeNetworkData() {
+
+		Map<String, String> map = new HashMap<>();
+
+		long executionTime = 0;
 
 		String networkDataStr = JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/",
 				"rest/master/readNetworkDataTable");
@@ -257,12 +263,20 @@ public class MasterWebServices {
 		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
 				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
 
+		long startTime = System.nanoTime();
+
 		// TODO: for testing purposes only
 		Worker worker = workers.getWorkers().get(0);
 
 		JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/data", networkDataStr);
 
-		return;
+		long stopTime = System.nanoTime();
+
+		executionTime = stopTime - startTime;
+
+		map.put("executionTime", executionTime + "");
+
+		return map;
 	}
 
 	@GET
