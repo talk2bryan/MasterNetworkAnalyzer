@@ -228,7 +228,7 @@ public class MasterWebServices {
 	@Path("/readNetworkDataTable")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<NetworkData> readNetworkDataRepository() {
-		String sql = "SELECT TimeStamp, rssiValue, SpeedInMbps FROM NetworkData";
+		String sql = "SELECT TimeStamp, rssiValue, SpeedInMbps, downloadSpeed FROM NetworkData";
 		try (Connection conn = this.connect();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql)) {
