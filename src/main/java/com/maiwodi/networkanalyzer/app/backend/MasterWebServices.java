@@ -1,6 +1,10 @@
 package com.maiwodi.networkanalyzer.app.backend;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,13 +23,22 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.json.JSONObject;
 
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
+import com.maiwodi.networkanalyzer.app.backend.models.MonteCarloParam;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
 import com.maiwodi.networkanalyzer.app.models.Worker;
@@ -415,9 +428,152 @@ public class MasterWebServices {
 		map.put("optionValue", response.readEntity(Double.class).toString());
 		map.put("monteCarloParam", monteCarloParam);
 
-		LOGGER.info("executionTime: {} ns", executionTime);
+		LOGGER.info("executionTime: {} s", executionTime / 1_000_000_000.0);
 
 		return map;
+	}
+
+	@GET
+	@Path("/autoMcSim/{device}")
+	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Produces("\"application/vnd.ms-excel\"")
+	public Response invokeMCSim(@PathParam("device") String device) {
+
+		Map<String, String> map = new HashMap<>();
+
+		long executionTime = 0;
+
+		Workers workers = Utilities.unmarshall(
+				JerseyClient.sendGetResponse("http://localhost:8080/networkanalyzer/", "rest/master/getAllWorkers"),
+				Workers.class);
+
+		Workers cloudWorkers = Utilities.unmarshall(JerseyClient.sendGetResponse(
+				"http://localhost:8080/networkanalyzer/", "rest/master/getAllCloudWorkers"), Workers.class);
+
+		// TODO: for testing purposes only
+		Worker worker = workers.getWorkers().get(0);
+		Worker cloud = cloudWorkers.getWorkers().get(0);
+
+		long startTime = System.nanoTime();
+
+		MonteCarloParam monteCarloParam = new MonteCarloParam();
+
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet();
+
+		monteCarloParam.setM(1000);
+
+		monteCarloParam.setN(10);
+
+		JSONObject jsonObject = new JSONObject(monteCarloParam);
+
+		Response response = null;
+
+		switch (device) {
+		case "fog":
+
+			Row tempRow = sheet.getRow(0);
+			if (tempRow == null) {
+				tempRow = sheet.createRow(0);
+			}
+
+			tempRow.createCell(0, CellType.STRING).setCellValue('M');
+			tempRow.createCell(0, CellType.STRING).setCellValue('N');
+			tempRow.createCell(0, CellType.STRING).setCellValue("Option value");
+			tempRow.createCell(0, CellType.STRING).setCellValue("Exceution Time");
+
+//			
+
+			for (int i = 0; i < 10; i++) {
+
+				long localExecutionTime = 0;
+
+				long localStartTime = System.nanoTime();
+
+				response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/mcSim", jsonObject);
+
+				long localStopTime = System.nanoTime();
+
+				localExecutionTime = localStopTime - localStartTime;
+
+			}
+			break;
+		case "master":
+
+			for (int i = 0; i < 1000; i++) {
+				response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
+						"rest/worker/post/mcSim", jsonObject);
+			}
+
+			break;
+
+		case "cloud":
+
+			for (int i = 0; i < 1000; i++) {
+				response = JerseyClient.sendPostResponse(cloud.getWorkerIP(), "rest/worker/post/mcSim", jsonObject);
+			}
+			break;
+
+		default:
+			break;
+		}
+
+		StreamingOutput streamingOutput = new StreamingOutput() {
+
+			@Override
+			public void write(OutputStream output) throws IOException, WebApplicationException {
+				try {
+					FileOutputStream outputStream = null;
+					try {
+						outputStream = new FileOutputStream("Test.xlsx");
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+					workbook.write(outputStream);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+
+		long stopTime = System.nanoTime();
+
+		executionTime = stopTime - startTime;
+
+		map.put("executionTime", executionTime / 1_000_000_000.0 + "");
+		map.put("optionValue", response.readEntity(Double.class).toString());
+//		map.put("monteCarloParam", monteCarloParam);
+
+		LOGGER.info("executionTime: {} s", executionTime / 1_000_000_000.0);
+
+//		ResponseBuilder rb = Response.ok(streamingOutput);
+//		rb.header("content-disposition", "attachment; filename=test2.xlsx");
+//		return rb.build();
+
+//		return Response.ok(streamingOutput, MediaType.APPLICATION_OCTET_STREAM)
+//				.header("Content-Disposition", "attachment; filename=\"" + "test2.xlsx" + "\"") // optional
+//				.build();
+
+		try {
+			FileOutputStream outputStream = new FileOutputStream("test");
+			workbook.write(outputStream);
+			workbook.close();
+
+			ResponseBuilder responseBuilder = Response.ok(outputStream);
+
+			responseBuilder.header("Content-Disposition", "attachment; filename=new-excel-file.xlsx");
+			return responseBuilder.build();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return response;
+
 	}
 
 	@GET
