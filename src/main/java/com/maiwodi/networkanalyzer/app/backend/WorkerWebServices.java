@@ -1,5 +1,6 @@
 package com.maiwodi.networkanalyzer.app.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -51,6 +52,20 @@ public class WorkerWebServices {
 				monteCarloParam.getM());
 
 		return result;
+	}
+
+	@POST
+	@Path("post/batchMcSim")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Double> batchMcSimulation(List<MonteCarloParam> monteCarloParams) {
+		List<Double> results = new ArrayList<>();
+
+		for (MonteCarloParam m : monteCarloParams) {
+			results.add(this.mcSimulation(m));
+		}
+
+		return results;
 	}
 
 }
