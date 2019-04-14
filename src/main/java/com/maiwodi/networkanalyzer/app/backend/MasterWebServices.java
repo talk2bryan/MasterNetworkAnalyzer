@@ -39,6 +39,7 @@ import org.primefaces.json.JSONObject;
 
 import com.maiwodi.networkanalyzer.app.backend.models.DummyModel;
 import com.maiwodi.networkanalyzer.app.backend.models.MonteCarloParam;
+import com.maiwodi.networkanalyzer.app.backend.models.MonteCarloResult;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkData;
 import com.maiwodi.networkanalyzer.app.backend.models.NetworkDataSummary;
 import com.maiwodi.networkanalyzer.app.models.Worker;
@@ -436,9 +437,10 @@ public class MasterWebServices {
 	@GET
 	@Path("/autoMcSim/{device}")
 	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	@Produces("\"application/vnd.ms-excel\"")
-	public Response invokeMCSim(@PathParam("device") String device) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<MonteCarloResult> invokeMCSim(@PathParam("device") String device) {
+
+		List<MonteCarloResult> monteCarloResults = new ArrayList<>();
 
 		Map<String, String> map = new HashMap<>();
 
@@ -459,85 +461,97 @@ public class MasterWebServices {
 
 		MonteCarloParam monteCarloParam = new MonteCarloParam();
 
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		Sheet sheet = workbook.createSheet();
-
 		monteCarloParam.setM(1000);
 
 		monteCarloParam.setN(10);
-
-		JSONObject jsonObject = new JSONObject(monteCarloParam);
 
 		Response response = null;
 
 		switch (device) {
 		case "fog":
+			for (int n = 10; n <= 100; n = n + 10) {
+				for (int m = 1000; m <= 10000; m = m + 100) {
 
-			Row tempRow = sheet.getRow(0);
-			if (tempRow == null) {
-				tempRow = sheet.createRow(0);
-			}
+					monteCarloParam.setM(m);
 
-			tempRow.createCell(0, CellType.STRING).setCellValue('M');
-			tempRow.createCell(0, CellType.STRING).setCellValue('N');
-			tempRow.createCell(0, CellType.STRING).setCellValue("Option value");
-			tempRow.createCell(0, CellType.STRING).setCellValue("Exceution Time");
+					monteCarloParam.setN(n);
 
-//			
+					long localExecutionTime = 0;
 
-			for (int i = 0; i < 10; i++) {
+					long localStartTime = System.nanoTime();
 
-				long localExecutionTime = 0;
+					response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/mcSim",
+							new JSONObject(monteCarloParam));
 
-				long localStartTime = System.nanoTime();
+					long localStopTime = System.nanoTime();
 
-				response = JerseyClient.sendPostResponse(worker.getWorkerIP(), "rest/worker/post/mcSim", jsonObject);
+					localExecutionTime = localStopTime - localStartTime;
+					monteCarloResults.add(new MonteCarloResult(monteCarloParam.getM(), monteCarloParam.getN(),
+							localExecutionTime / 1_000_000_000.0));
 
-				long localStopTime = System.nanoTime();
-
-				localExecutionTime = localStopTime - localStartTime;
+				}
 
 			}
 			break;
 		case "master":
+			
+			
+			for (int n = 10; n <= 100; n = n + 10) {
+				for (int m = 1000; m <= 10000; m = m + 100) {
 
-			for (int i = 0; i < 1000; i++) {
-				response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
-						"rest/worker/post/mcSim", jsonObject);
+					monteCarloParam.setM(m);
+
+					monteCarloParam.setN(n);
+
+					long localExecutionTime = 0;
+
+					long localStartTime = System.nanoTime();
+
+					response = JerseyClient.sendPostResponse("http://localhost:8080/networkanalyzer/",
+							"rest/worker/post/mcSim", new JSONObject(monteCarloParam));
+
+					long localStopTime = System.nanoTime();
+
+					localExecutionTime = localStopTime - localStartTime;
+					monteCarloResults.add(new MonteCarloResult(monteCarloParam.getM(), monteCarloParam.getN(),
+							localExecutionTime / 1_000_000_000.0));
+
+				}
+
 			}
 
 			break;
 
 		case "cloud":
 
-			for (int i = 0; i < 1000; i++) {
-				response = JerseyClient.sendPostResponse(cloud.getWorkerIP(), "rest/worker/post/mcSim", jsonObject);
+			for (int n = 10; n <= 100; n = n + 10) {
+				for (int m = 1000; m <= 10000; m = m + 100) {
+
+					monteCarloParam.setM(m);
+
+					monteCarloParam.setN(n);
+
+					long localExecutionTime = 0;
+
+					long localStartTime = System.nanoTime();
+
+					response = JerseyClient.sendPostResponse(cloud.getWorkerIP(), "rest/worker/post/mcSim",
+							new JSONObject(monteCarloParam));
+
+					long localStopTime = System.nanoTime();
+
+					localExecutionTime = localStopTime - localStartTime;
+					monteCarloResults.add(new MonteCarloResult(monteCarloParam.getM(), monteCarloParam.getN(),
+							localExecutionTime / 1_000_000_000.0));
+
+				}
+
 			}
 			break;
 
 		default:
 			break;
 		}
-
-		StreamingOutput streamingOutput = new StreamingOutput() {
-
-			@Override
-			public void write(OutputStream output) throws IOException, WebApplicationException {
-				try {
-					FileOutputStream outputStream = null;
-					try {
-						outputStream = new FileOutputStream("Test.xlsx");
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					}
-					workbook.write(outputStream);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		};
 
 		long stopTime = System.nanoTime();
 
@@ -549,30 +563,7 @@ public class MasterWebServices {
 
 		LOGGER.info("executionTime: {} s", executionTime / 1_000_000_000.0);
 
-//		ResponseBuilder rb = Response.ok(streamingOutput);
-//		rb.header("content-disposition", "attachment; filename=test2.xlsx");
-//		return rb.build();
-
-//		return Response.ok(streamingOutput, MediaType.APPLICATION_OCTET_STREAM)
-//				.header("Content-Disposition", "attachment; filename=\"" + "test2.xlsx" + "\"") // optional
-//				.build();
-
-		try {
-			FileOutputStream outputStream = new FileOutputStream("test");
-			workbook.write(outputStream);
-			workbook.close();
-
-			ResponseBuilder responseBuilder = Response.ok(outputStream);
-
-			responseBuilder.header("Content-Disposition", "attachment; filename=new-excel-file.xlsx");
-			return responseBuilder.build();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return response;
+		return monteCarloResults;
 
 	}
 
