@@ -1,5 +1,8 @@
-This is a maven project for networking analyzer
+# MasterNetworkAnalyzer
 
+This is a Tomcat Server application for processing network traffic and receving the data at intervals from distributed [clients](https://github.com/talk2bryan/NetworkAnalyzer).
+
+As part of a cloud computing project, we are experimenting on an algorithm that decides when queries should be processed at the fog or a remote server level.
 
 
 **Sample Data**
